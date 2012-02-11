@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html manifest='app.manifest'>
+    <head>
+        <title>Snooze</title>
+        <link rel="apple-touch-icon" href="logo.png"/>  
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <script type='text/javascript' src='jquery-1.7.1.min.js'></script>
+        <script type='text/javascript' src='underscore-1.3.1.min.js'></script>
+        <script type='text/javascript' src='moment-1.4.0.min.js'></script>
+        <script type='text/javascript' src='app.js'></script>
+        <style type='text/css'>
+            body {
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                font-size: 12pt;
+                line-height: 1.4;
+                margin: 0;
+            }
+            h1 {
+                font-size: 16pt;
+                margin: .2em;
+                color: #333;
+                text-shadow: #888 0px 1px 2px;
+            }
+            h2 {
+                font-size: 14pt;
+                padding-top: .5em;
+                padding-left: .5em;
+                color: #222;
+            }
+            .odd {
+                background: #eee;
+            }
+            #items {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            #new {
+                border-radius: 5px;
+                background: #eee;
+                margin: 10px;
+                box-shadow: #444 0px 1px 5px;
+            }
+            .item, #form {
+                padding: .5em .2em .5em .25em;
+            }
+            .item {
+                overflow: hidden;
+                position: relative;
+            }
+            .item .index {
+                position: absolute;
+                z-index: 0;
+                font-size: 40px;
+                left: -8px;
+                top: -14px;
+                font-weight: bold;
+            }
+            .even .index {
+                color: #eee;
+            }
+            .odd .index {
+                color: #fff;
+            }
+            .item .description {
+                position: relative;
+                z-index: 10;
+                xmargin-left: 15px;
+            }
+            .item .when {
+                position: relative;
+                z-index: 10;
+                font-size: 80%;
+                color: #888;
+            }
+            .due {
+                font-weight: bold;
+            }
+            .overdue {
+                font-weight: bold;
+                color: #800;
+            }
+            .item .buttons {
+                float: right;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>» Snooze</h1>
+        <div id='items'>
+        </div>
+        <div id='new'>
+            <h2>Add item
+                <div id='form'>
+                    <input type='text' placeholder='Description' size='40' id='newDescription' />
+                    <br/>
+                    <select id='newInterval'>
+                        <option value='1'>Every Day</option>
+                        <option value='2'>Every Other Day</option>
+                        <option value='7'>Every Week</option>
+                        <option value='14'>Every Other Week</option>
+                        <option value='30' selected='true'>Every Month</option>
+                        <option value='60'>Every Other Month</option>
+                    </select>
+                    <button id='newAdd'>Add</button>
+                </div>
+            </div>
+            <div id='footer'>
+            </div>
+        </body>
+    </html>
