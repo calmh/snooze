@@ -82,17 +82,25 @@ function color(start, end, pct) {
 }
 
 function addItems(items, start, end) {
-    var now, el, el2, d1;
-    now = Math.round(Date.now() / 1000);
+    var now, el, el2, d1, ns, ndue = 0, nfuture = 0;
+
+    // Set number of shades to a little more than the amount of items we have.
+    ns = items.length + 3;
+    // Use a minimum number to not make the contrast between two neighboring
+    // items too large.
+    if (ns < 8) {
+        ns = 8;
+    }
     $('#items-due').empty();
     $('#items-future').empty();
+    now = Math.round(Date.now() / 1000);
     _.each(items, function (item, index) {
         d1 = $(document.createElement('div'));
-        d1.css('background-color', color(start, end, index / items.length));
+        d1.css('background-color', color(start, end, index / ns));
 
         el = $('<div>' + index + '</div>');
         el.addClass('index');
-        el.css('color', color(start, end, (index + 1) / items.length));
+        el.css('color', color(start, end, (index + 3) / ns));
         d1.append(el);
 
         el = $('<span>' + item.description + '</span>');
@@ -125,10 +133,18 @@ function addItems(items, start, end) {
 
         if (due(item) > now) {
             $('#items-future').append(d1);
+            nfuture++;
         } else {
             $('#items-due').append(d1);
+            ndue++;
         }
     });
+
+    if (ndue > 0 && nfuture > 0) {
+        $('#divider').show();
+    } else {
+        $('#divider').hide();
+    }
 }
 
 // Display the list of items.
