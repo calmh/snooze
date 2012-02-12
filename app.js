@@ -31,15 +31,13 @@ function markDone() {
     var id, item;
     id = $(this).attr('data-id');
     item = items[id];
-    if (confirm('Mark "' + item.description + '" as done for this interval?')) {
-        if (!item.done) {
-            item.done = [];
-        }
-        item.done.push(Math.round(Date.now() / 1000));
-        item.due = Math.round(Date.now() / 1000 + item.interval);
-        _.defer(displayItems);
-        _.defer(save);
+    if (!item.done) {
+        item.done = [];
     }
+    item.done.push(Math.round(Date.now() / 1000));
+    item.due = Math.round(Date.now() / 1000 + item.interval);
+    _.defer(displayItems);
+    _.defer(save);
 }
 
 // Delete an item.
@@ -80,18 +78,21 @@ function color(start, end, pct) {
     for (i = 0; i < 3; i++) {
         res.push(Math.round(start[i] + (end[i] - start[i]) * pct));
     }
-    return 'rgb(' + res.join(',') + ')';
+    return "rgb(" + res.join(',') + ")";
 }
 
-function addItems(items, div, start, end) {
-    div.empty();
+function addItems(items, start, end) {
+    var now, el, el2, d1;
+    now = Math.round(Date.now() / 1000);
+    $('#items-due').empty();
+    $('#items-future').empty();
     _.each(items, function (item, index) {
         d1 = $(document.createElement('div'));
-        d1.css('background-color', color(start, end, index/items.length));
+        d1.css('background-color', color(start, end, index / items.length));
 
         el = $('<div>' + index + '</div>');
         el.addClass('index');
-        el.css('color', color(start, end, (index + 1)/items.length));
+        el.css('color', color(start, end, (index + 1) / items.length));
         d1.append(el);
 
         el = $('<span>' + item.description + '</span>');
@@ -122,24 +123,18 @@ function addItems(items, div, start, end) {
         d1.addClass('item');
         d1.click(expand);
 
-        div.append(d1);
+        if (due(item) > now) {
+            $('#items-future').append(d1);
+        } else {
+            $('#items-due').append(d1);
+        }
     });
 }
 
 // Display the list of items.
 function displayItems() {
-    var now, remaining, el, el2, d1;
-
-    now = Math.round(Date.now() / 1000);
-
-/*
- * Use two lists. This turned out to be less pleasing.
-    itemlist = _.groupBy(_.sortBy(_.values(items), due), function (i) { return due(i) < now });
-    addItems(itemlist[true], $('#items-due'), [255, 0, 0], [220, 220, 0]);
-    addItems(itemlist[false], $('#items-future'), [160, 160, 220], [0, 0, 240]);
-*/
-    itemlist = _.sortBy(_.values(items), due);
-    addItems(itemlist, $('#items-due'), [255, 0, 0], [220, 220, 0]);
+    var itemlist = _.sortBy(_.values(items), due);
+    addItems(itemlist, [255, 0, 0], [220, 220, 0]);
 }
 
 function calculateNextId() {
