@@ -3,6 +3,7 @@
 
 var items;
 var nextId = 0;
+var animation = 150;
 
 // Create a new item from information in the form section.
 function newItem() {
@@ -61,80 +62,91 @@ function due(item) {
     }
 }
 
-// Display the list of items.
-function displayItems() {
-    var div, now, remaining, el, el2, d1;
-    div = $('#items');
-    div.empty();
+function expand() {
+    var par, el;
+    par = $(this);
+    el = par.children('.extra');
+    if (el.is(':visible')) {
+        el.slideUp(animation);
+    } else {
+        $('.extra').hide(animation);
+        el.slideDown(animation);
+    }
+}
 
-    now = Math.round(Date.now() / 1000);
-    itemlist = _.sortBy(_.values(items), due);
-    _.each(itemlist, function (item, index) {
-        remaining = due(item) - now;
+function color(start, end, pct) {
+    var res, i;
+    res = [];
+    for (i = 0; i < 3; i++) {
+        res.push(Math.round(start[i] + (end[i] - start[i]) * pct));
+    }
+    return 'rgb(' + res.join(',') + ')';
+}
+
+function addItems(items, div, start, end) {
+    div.empty();
+    _.each(items, function (item, index) {
         d1 = $(document.createElement('div'));
+        d1.css('background-color', color(start, end, index/items.length));
 
         el = $('<div>' + index + '</div>');
         el.addClass('index');
+        el.css('color', color(start, end, (index + 1)/items.length));
         d1.append(el);
 
         el = $('<span>' + item.description + '</span>');
         el.addClass('description');
         d1.append(el);
 
-        el = $('<span> ' + moment(due(item) * 1000).fromNow() + '</span>');
-        el.addClass('when');
-        d1.append(el);
-
         el2 = $(document.createElement('div'));
-        el2.addClass('buttons');
+        el2.addClass('extra');
+        el2.hide();
         d1.append(el2);
 
-        el = $('<button>Done!</button>');
+        el = $('<div>Due ' + moment(due(item) * 1000).fromNow() + '</span>');
+        el.addClass('when');
+        el2.append(el);
+
+        el = $('<button>Done</button>');
         el.attr('data-id', item.id);
+        el.addClass('button-done');
         el.click(markDone);
         el2.append(el);
 
         el = $('<button>Delete</button>');
         el.attr('data-id', item.id);
+        el.addClass('button-delete');
         el.click(deleteItem);
         el2.append(el);
 
         d1.addClass('item');
-
-        if (remaining < 0) {
-            d1.addClass('overdue');
-        } else if (remaining < item.interval / 7) {
-            d1.addClass('due');
-        }
-
-        if (index % 2 === 0) {
-            d1.addClass('even');
-        } else {
-            d1.addClass('odd');
-        }
+        d1.click(expand);
 
         div.append(d1);
     });
+}
+
+// Display the list of items.
+function displayItems() {
+    var now, remaining, el, el2, d1;
+
+    now = Math.round(Date.now() / 1000);
+
+/*
+ * Use two lists. This turned out to be less pleasing.
+    itemlist = _.groupBy(_.sortBy(_.values(items), due), function (i) { return due(i) < now });
+    addItems(itemlist[true], $('#items-due'), [255, 0, 0], [220, 220, 0]);
+    addItems(itemlist[false], $('#items-future'), [160, 160, 220], [0, 0, 240]);
+*/
+    itemlist = _.sortBy(_.values(items), due);
+    addItems(itemlist, $('#items-due'), [255, 0, 0], [220, 220, 0]);
 }
 
 function calculateNextId() {
     var changed;
     _.each(items, function (item, id) {
         nextId = id >= nextId ? id + 1 : nextId;
-
-        // Schema upgrade, remove 'due'
-        if (item.due) {
-            changed = true;
-            if (!item.done) {
-                item.done = [ item.due - item.interval ];
-            }
-            item.due = undefined;
-        }
     });
-
-    if (changed) {
-        _.defer(save);
-    }
 }
 
 $(document).ready(function () {

@@ -3,6 +3,7 @@
     <head>
         <title>Snooze</title>
         <link rel="apple-touch-icon" href="logo.png"/>  
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <script type='text/javascript' src='jquery-1.7.1.min.js'></script>
@@ -13,8 +14,15 @@
             body {
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 font-size: 12pt;
+                font-weight: 500;
                 line-height: 1.4;
                 margin: 0;
+                background-color: #000;
+                -webkit-user-select: none;
+                -webkit-tap-highlight-color: rgba(0,0,0,0); 
+            }
+            input {
+                -webkit-text-size-adjust: 140%;
             }
             h1 {
                 font-size: 16pt;
@@ -23,23 +31,22 @@
                 text-shadow: #888 0px 1px 2px;
             }
             h2 {
-                font-size: 14pt;
-                padding-top: .5em;
-                padding-left: .5em;
+                font-size: 12pt;
+                padding: .4em .2em .0em .4em;
+                margin: 0;
                 color: #222;
             }
-            .odd {
-                background: #eee;
-            }
-            #items {
+            #items-due, #items-future, #new {
                 width: 100%;
-                margin-bottom: 10px;
             }
             #new {
-                border-radius: 5px;
                 background: #eee;
-                margin: 10px;
-                box-shadow: #444 0px 1px 5px;
+            }
+            #new input {
+                width: 90%;
+            }
+            #new button, #new select {
+                margin-left: 10px;
             }
             .item, #form {
                 padding: .5em .2em .5em .25em;
@@ -47,31 +54,27 @@
             .item {
                 overflow: hidden;
                 position: relative;
+                color: #fff;
             }
             .item .index {
                 position: absolute;
                 z-index: 0;
-                font-size: 40px;
-                left: -8px;
-                top: -14px;
+                font-size: 70px;
+                left: -12px;
+                top: -26px;
                 font-weight: bold;
             }
-            .even .index {
-                color: #eee;
-            }
-            .odd .index {
-                color: #fff;
-            }
             .item .description {
+                padding-left: 12px;
                 position: relative;
                 z-index: 10;
-                xmargin-left: 15px;
             }
             .item .when {
+                padding-left: 12px;
                 position: relative;
                 z-index: 10;
                 font-size: 80%;
-                color: #888;
+                color: #eee;
             }
             .due {
                 font-weight: bold;
@@ -80,32 +83,58 @@
                 font-weight: bold;
                 color: #800;
             }
-            .item .buttons {
+            button {
+                font-weight: bold;
+                margin: 5px;
+                display: inline-block;
+                padding: 4px 10px 4px;
+                color: #333333;
+                text-align: center;
+                text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+                background-color: #fafafa;
+                background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6));
+                background-image: -webkit-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+                background-image: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
+                background-image: -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+                background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+                background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+                background-repeat: no-repeat;
+                border: 1px solid #aaa;
+                border-bottom-color: #999;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+                -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+                -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+            }
+            .button-delete {
                 float: right;
             }
         </style>
     </head>
     <body>
-        <h1>» Snooze</h1>
-        <div id='items'>
+        <div id='items-due'>
+        </div>
+        <div id='items-future'>
         </div>
         <div id='new'>
-            <h2>Add item
-                <div id='form'>
-                    <input type='text' placeholder='Description' size='40' id='newDescription' />
-                    <br/>
-                    <select id='newInterval'>
-                        <option value='1'>Every Day</option>
-                        <option value='2'>Every Other Day</option>
-                        <option value='7'>Every Week</option>
-                        <option value='14'>Every Other Week</option>
-                        <option value='30' selected='true'>Every Month</option>
-                        <option value='60'>Every Other Month</option>
-                    </select>
-                    <button id='newAdd'>Add</button>
-                </div>
+            <h2>Add item</h2>
+            <div id='form'>
+                <input type='text' placeholder='Description' id='newDescription' />
+                <br/>
+                <select id='newInterval'>
+                    <option value='1'>Every Day</option>
+                    <option value='2'>Every Other Day</option>
+                    <option value='7'>Every Week</option>
+                    <option value='14'>Every Other Week</option>
+                    <option value='30' selected='true'>Every Month</option>
+                    <option value='60'>Every Other Month</option>
+                </select>
+                <button id='newAdd'>Add</button>
             </div>
-            <div id='footer'>
-            </div>
-        </body>
-    </html>
+        </div>
+        <div id='footer'>
+        </div>
+    </body>
+</html>
