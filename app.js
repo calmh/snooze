@@ -140,7 +140,7 @@ function addItems(items, start, end) {
         }
     });
 
-    if (ndue > 0 && nfuture > 0) {
+    if (nfuture > 0) {
         $('#divider').show();
     } else {
         $('#divider').hide();
