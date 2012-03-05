@@ -3,7 +3,6 @@
 
 var items;
 var nextId = 0;
-var animation = 150;
 
 // Create a new item from information in the form section.
 function newItem() {
@@ -64,11 +63,11 @@ function expand() {
     var par, el;
     par = $(this);
     el = par.children('.extra');
-    if (el.is(':visible')) {
-        el.slideUp(animation);
+    if (el.css('height') !== '0px') {
+        el.css('height', 0);
     } else {
-        $('.extra').hide(animation);
-        el.slideDown(animation);
+        $('.extra').css('height', 0);
+        el.css('height', '60px'); // Picked out of thin air
     }
 }
 
@@ -109,7 +108,6 @@ function addItems(items, start, end) {
 
         el2 = $(document.createElement('div'));
         el2.addClass('extra');
-        el2.hide();
         d1.append(el2);
 
         el = $('<div>Due ' + moment(due(item) * 1000).fromNow() + '</span>');
