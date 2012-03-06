@@ -67,17 +67,26 @@ function expand() {
     par = $(this);
     el = par.children('.extra');
     if (!el.is(':visible')) {
-        $('.extra').hide();
-        $('.item').css('margin', '0px');
-        $('.item').css('-webkit-box-shadow', 'none');
+        $('.extraVisible').hide()
+            .removeClass('extraVisible');
 
-        el.show();
-        par.css('margin', '10px 0px 10px 0px');
-        par.css('-webkit-box-shadow', '0px 0px 5px #444');
+        $('.expanded').css('margin', '0px')
+            .css('-webkit-box-shadow', 'none')
+            .removeClass('.expanded');
+
+        el.show()
+            .addClass('extraVisible');
+
+        par.css('margin', '10px 0px 10px 0px')
+            .css('-webkit-box-shadow', '0px 0px 5px #444')
+            .addClass('expanded');
     } else {
-        el.hide();
-        par.css('margin', '0px 0px 0px 0px');
-        par.css('-webkit-box-shadow', 'none');
+        el.hide()
+            .removeClass('extraVisible');
+
+        par.css('margin', '0px 0px 0px 0px')
+            .css('-webkit-box-shadow', 'none')
+            .removeClass('expanded');
     }
 }
 
@@ -102,8 +111,9 @@ function moreItems() {
 function addItems(items, start, end) {
     var now, el, el2, d1, ns, ndue = 0, nfuture = 0, ci = 0;
 
-    if (maxItems === items.length - 1)
+    if (maxItems === items.length - 1) {
         maxItems++;
+    }
 
     // Calculate the number of shades to use
     ns = (items.length <= maxItems) ? items.length : maxItems + 1;
