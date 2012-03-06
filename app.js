@@ -84,8 +84,8 @@ function expand() {
         el.hide()
             .removeClass('extraVisible');
 
-        par.css('margin', '0px 0px 0px 0px')
-            .css('-webkit-box-shadow', 'none')
+        par.css('margin', '')
+            .css('-webkit-box-shadow', '')
             .removeClass('expanded');
     }
 }
@@ -124,7 +124,7 @@ function addItems(items, start, end) {
     $('#items-future').empty();
     now = Math.round(Date.now() / 1000);
     _.each(items.slice(0, maxItems), function (item, index) {
-        var check;
+        var check, extra, tmp;
 
         d1 = $(document.createElement('div'));
         d1.css('background-color', color(start, end, ci++ / ns));
@@ -147,7 +147,17 @@ function addItems(items, start, end) {
         el2.addClass('extra');
         d1.append(el2);
 
-        el = $('<div>Due ' + moment(due(item) * 1000).fromNow() + '</span>');
+        extra = 'Due ' + moment(due(item) * 1000).fromNow() + '.';
+        if (item.done.length > 0) {
+            tmp = item.done.slice(0).reverse().slice(0, 3);
+            extra += ' Done ' + _.map(tmp, function (x) { return moment(1000*x).fromNow(); }).join(', ');
+            if (item.done.length > 3) {
+                extra += ', &#x2026;';
+            } else {
+                extra += '.';
+            }
+        }
+        el = $('<div>' + extra + '</div>');
         el.addClass('when');
         el2.append(el);
 
