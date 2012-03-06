@@ -94,6 +94,8 @@ function addItems(items, start, end) {
     $('#items-future').empty();
     now = Math.round(Date.now() / 1000);
     _.each(items, function (item, index) {
+        var check;
+
         d1 = $(document.createElement('div'));
         d1.css('background-color', color(start, end, index / ns));
 
@@ -102,7 +104,12 @@ function addItems(items, start, end) {
         el.css('color', color(start, end, (index + 3) / ns));
         d1.append(el);
 
-        el = $('<span>' + item.description + '</span>');
+        if (due(item) > now) {
+            check = '&#x2611;';
+        } else {
+            check = '&#x2610;';
+        }
+        el = $('<span>' + check + ' ' + item.description + '</span>');
         el.addClass('description');
         d1.append(el);
 
@@ -114,13 +121,13 @@ function addItems(items, start, end) {
         el.addClass('when');
         el2.append(el);
 
-        el = $('<button>Done</button>');
+        el = $('<button>&#x2713; Done</button>');
         el.attr('data-id', item.id);
         el.addClass('button-done');
         el.click(markDone);
         el2.append(el);
 
-        el = $('<button>Delete</button>');
+        el = $('<button>&#x2717; Delete</button>');
         el.attr('data-id', item.id);
         el.addClass('button-delete');
         el.click(deleteItem);
@@ -137,12 +144,6 @@ function addItems(items, start, end) {
             ndue++;
         }
     });
-
-    if (nfuture > 0) {
-        $('#divider').show();
-    } else {
-        $('#divider').hide();
-    }
 }
 
 // Display the list of items.
