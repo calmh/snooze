@@ -3,6 +3,9 @@
 
 var items;
 var nextId = 0;
+var maxItems = 8;
+var startColor = [255, 0, 0];
+var endColor = [230, 230, 0];
 
 // Create a new item from information in the form section.
 function newItem() {
@@ -81,34 +84,44 @@ function expand() {
 function color(start, end, pct) {
     var res, i;
     res = [];
+
+    pct = (pct < 0.0) ? 0.0 : pct;
+    pct = (pct > 1.0) ? 1.0 : pct;
+
     for (i = 0; i < 3; i++) {
         res.push(Math.round(start[i] + (end[i] - start[i]) * pct));
     }
     return "rgb(" + res.join(',') + ")";
 }
 
-function addItems(items, start, end) {
-    var now, el, el2, d1, ns, ndue = 0, nfuture = 0;
+function moreItems() {
+    maxItems *= 2;
+    displayItems();
+}
 
-    // Set number of shades to a little more than the amount of items we have.
-    ns = items.length + 3;
-    // Use a minimum number to not make the contrast between two neighboring
-    // items too large.
-    if (ns < 8) {
-        ns = 8;
-    }
+function addItems(items, start, end) {
+    var now, el, el2, d1, ns, ndue = 0, nfuture = 0, ci = 0;
+
+    if (maxItems === items.length - 1)
+        maxItems++;
+
+    // Calculate the number of shades to use
+    ns = (items.length <= maxItems) ? items.length : maxItems + 1;
+    // Never use less than four shades
+    ns = (ns < 4) ? 4 : ns;
+
     $('#items-due').empty();
     $('#items-future').empty();
     now = Math.round(Date.now() / 1000);
-    _.each(items, function (item, index) {
+    _.each(items.slice(0, maxItems), function (item, index) {
         var check;
 
         d1 = $(document.createElement('div'));
-        d1.css('background-color', color(start, end, index / ns));
+        d1.css('background-color', color(start, end, ci++ / ns));
 
         el = $('<div>' + index + '</div>');
         el.addClass('index');
-        el.css('color', color(start, end, (index + 3) / ns));
+        //el.css('color', color(start, end, index / ns));
         d1.append(el);
 
         if (due(item) > now) {
@@ -151,12 +164,26 @@ function addItems(items, start, end) {
             ndue++;
         }
     });
+
+    if (items.length > maxItems) {
+        d1 = $(document.createElement('div'));
+        d1.css('background-color', color(start, end, ci++ / ns));
+        d1.addClass('item');
+        d1.click(moreItems);
+
+        el = $('<span>&#x21bb; Show ' + (items.length - maxItems) + ' more items</span>');
+        el.addClass('description');
+        d1.append(el);
+        $('#items-future').append(d1);
+    }
+
+    $('#new').css('background-color', color(start, end, ci++ / ns));
 }
 
 // Display the list of items.
 function displayItems() {
     var itemlist = _.sortBy(_.values(items), due);
-    addItems(itemlist, [255, 0, 0], [220, 220, 0]);
+    addItems(itemlist, startColor, endColor);
 }
 
 function calculateNextId() {
