@@ -24,7 +24,7 @@
                 font-weight: 500;
                 line-height: 1.4;
                 margin: 0;
-                background-color: #000;
+                background-color: #eee;
                 color: #fff;
                 -webkit-user-select: none;
                 -webkit-tap-highlight-color: rgba(0,0,0,0); 
@@ -40,7 +40,6 @@
                 color: #222;
             }
             #items-due, #items-future, #new {
-
                 width: 100%;
             }
             #new {
@@ -62,6 +61,7 @@
                 overflow: hidden;
                 position: relative;
                 color: #fff;
+                x-webkit-box-shadow: 0px 0px 5px #444;
             }
             .item .index {
                 position: absolute;
@@ -121,21 +121,8 @@
             .button-delete {
                 float: right;
             }
-            #divider {
-                background: #eee;
-                color: #555;
-                text-align: center;
-                padding: 3px;
-                border-top: 2px dotted #aaa;
-                border-bottom: 2px dotted #aaa;
-            }
             .extra {
-                -webkit-transition: all .25s ease-in-out;
-                -moz-transition: all .25s ease-in-out;
-                -o-transition: all .25s ease-in-out;
-                -ms-transition: all .25s ease-in-out;
-                transition: all .25s ease-in-out;
-                height: 0px;
+                display: none;
                 overflow: hidden;
             }
         </style>

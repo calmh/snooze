@@ -63,11 +63,18 @@ function expand() {
     var par, el;
     par = $(this);
     el = par.children('.extra');
-    if (el.css('height') !== '0px') {
-        el.css('height', 0);
+    if (!el.is(':visible')) {
+        $('.extra').hide();
+        $('.item').css('margin', '0px');
+        $('.item').css('-webkit-box-shadow', 'none');
+
+        el.show();
+        par.css('margin', '10px 0px 10px 0px');
+        par.css('-webkit-box-shadow', '0px 0px 5px #444');
     } else {
-        $('.extra').css('height', 0);
-        el.css('height', '60px'); // Picked out of thin air
+        el.hide();
+        par.css('margin', '0px 0px 0px 0px');
+        par.css('-webkit-box-shadow', 'none');
     }
 }
 
