@@ -14,24 +14,38 @@
         <script type='text/javascript' src='app.js'></script>
     </head>
     <body>
-        <div id='items'>
-        </div>
-        <div id='new'>
-            <div id='form'>
-                <input type='text' placeholder='Description' id='newDescription' />
-                <br/>
-                <select id='newInterval'>
-                    <option value='1'>Every Day</option>
-                    <option value='2'>Every Other Day</option>
-                    <option value='7'>Every Week</option>
-                    <option value='14'>Every Other Week</option>
-                    <option value='30' selected='true'>Every Month</option>
-                    <option value='60'>Every Other Month</option>
-                </select>
-                <button id='newAdd'><i class='icon-plus'></i> Add</button>
+        <div id='app'>
+            <div id='items'>
+            </div>
+            <div id='new'>
+                <div id='form'>
+                    <input type='text' placeholder='Description' id='newDescription' />
+                    <br/>
+                    <select id='newInterval'>
+                        <option value='1'>Every Day</option>
+                        <option value='2'>Every Other Day</option>
+                        <option value='7'>Every Week</option>
+                        <option value='14'>Every Other Week</option>
+                        <option value='30' selected='true'>Every Month</option>
+                        <option value='60'>Every Other Month</option>
+                    </select>
+                    <button id='newAdd'><i class='icon-plus'></i> Add</button>
+                </div>
             </div>
         </div>
-        <div id='footer'>
+        <div id='addToHomeScreen' style='display: none'>
+            <h1>Hi!</h1>
+            <p>
+            This app needs to run from the home screen
+            in order to correctly utilize local storage and
+            provide an optimal user experience.
+            </p>
+            <p>
+            To install the app, press
+            the <i class='icon-share'></i> button and select
+            "Add to Home Screen". You can then start Snooze from the
+            icon on your home screen.
+            </p>
         </div>
     </body>
     <script type='text/html' id='item-template'>

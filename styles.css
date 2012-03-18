@@ -111,3 +111,8 @@ select {
     display: none;
     overflow: hidden;
 }
+#addToHomeScreen {
+    background: #666;
+    padding: 2em;
+    height: 100%;
+}

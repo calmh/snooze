@@ -208,6 +208,13 @@ function calculateNextId() {
 }
 
 $(document).ready(function () {
+    // Enforce home screen installation on iDevices.
+    if (window.navigator.userAgent.match(/iPhone|iPad/) && !window.navigator.standalone == true) {
+        $('#addToHomeScreen').show();
+        $('#app').hide();
+        return;
+    }
+
     $('#newAdd').click(newItem);
 
     items = JSON.parse(localStorage.getItem('items'));
