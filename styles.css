@@ -1,0 +1,110 @@
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    body {
+        margin: 0;
+    }
+}
+@media only screen and (min-device-width: 481px) {
+    body {
+        max-width: 480px;
+        margin: auto;
+    }
+}
+.item {
+    font-size: 18pt;
+}
+body, button, input, select {
+    font-size: 12pt;
+}
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    line-height: 1.4;
+    background-color: #eee;
+    color: #fff;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0); 
+    -webkit-box-shadow: 0px 0px 10px #444;
+}
+#items, #new {
+    width: 100%;
+}
+.due {
+    font-weight: 600;
+}
+#new {
+    background: #eee;
+}
+#new input {
+    width: 90%;
+}
+#new button, #new select {
+    margin-left: 10px;
+}
+#form {
+    text-align: center;
+}
+.item, #form {
+    padding: .5em .2em .5em .25em;
+}
+.item {
+    overflow: hidden;
+    position: relative;
+    color: #fff;
+    x-webkit-box-shadow: 0px 0px 5px #444;
+}
+.item .index {
+    position: absolute;
+    z-index: 0;
+    font-size: 100px;
+    right: -12px;
+    top: -42px;
+    font-weight: bold;
+    opacity: 0.3;
+}
+.item .description {
+    padding-left: 2em;
+    position: relative;
+    z-index: 10;
+}
+.item .when {
+    padding-left: 12px;
+    position: relative;
+    z-index: 10;
+    font-size: 80%;
+    color: #eee;
+}
+button {
+    font-weight: bold;
+    margin: 10px;
+    min-width: 100px;
+    min-height: 30px;
+
+    display: inline-block;
+    padding: 4px 10px 4px;
+    color: #333333;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    background-color: #fafafa;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    background-image: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
+    background-image: -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    background-repeat: no-repeat;
+    border: 1px solid #aaa;
+    border-bottom-color: #999;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.button-delete {
+    float: right;
+}
+.extra {
+    display: none;
+    overflow: hidden;
+}
