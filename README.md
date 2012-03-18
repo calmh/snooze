@@ -8,7 +8,7 @@ when an item is completed it is scheduled for completion again one interval
 into the future.
 
 This is also different from a common repeating todo item where you specify that
-you want a reminder at 9 am every tuesday, for example. *Snooze* doesn't care
+you want a reminder at 9 am every tuesday for example. *Snooze* doesn't care
 about when or what day of the week an item is completed, only how long it was
 since last time. Every time an item is completed, it's pushed forward by the
 set interval.
@@ -40,6 +40,9 @@ Environment
 *Snooze* is a HTML5 web app that uses HTML5 local storage to store your items
 and the application cache to enable off line usage. This means it'll run just
 fine in any modern browser. However it's optimized for smart phone form factor
-and looks quite crappy on a desktop browser at fill width. It looks gorgeous on
+and looks quite crappy on a desktop browser at full width. It looks gorgeous on
 an iPhone or Android device though.
+
+-- 
+Jakob Borg, 2012-03-18
 
