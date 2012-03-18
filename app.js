@@ -182,8 +182,10 @@ function addItems(items, start, end) {
         $('#items').append(rendered);
     }
 
-    // Set the background of the "Add new item" panel so it matches the list.
-    $('#new').css('background-color', color(start, end, ci++ / ns));
+    if (ci > 0) {
+        // Set the background of the "Add new item" panel so it matches the list.
+        $('#new').css('background-color', color(start, end, ci++ / ns));
+    }
 }
 
 // Display the list of items.

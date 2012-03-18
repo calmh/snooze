@@ -11,8 +11,19 @@
         <script type='text/javascript' src='lib/moment-1.4.0.min.js'></script>
         <script type='text/javascript' src='app.js'></script>
         <style type='text/css'>
+            @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+                body {
+                    margin: 0;
+                }
+            }
+            @media only screen and (min-device-width: 481px) {
+                body {
+                    max-width: 480px;
+                    margin: auto;
+                }
+            }
             .item {
-                font-size: 17pt;
+                font-size: 18pt;
             }
             body, button, input, select {
                 font-size: 12pt;
@@ -22,21 +33,20 @@
                 font-family: Helvetica, Arial, sans-serif;
                 font-weight: 500;
                 line-height: 1.4;
-                margin: 0;
                 background-color: #eee;
                 color: #fff;
                 -webkit-user-select: none;
                 -webkit-tap-highlight-color: rgba(0,0,0,0); 
+                -webkit-box-shadow: 0px 0px 10px #444;
             }
-            #items-due, #items-future, #new {
+            #items, #new {
                 width: 100%;
             }
-            #items-due {
+            #items {
                 font-weight: 600;
             }
             #new {
                 background: #eee;
-                -webkit-box-shadow: 0px 0px 10px #444;
             }
             #new input {
                 width: 90%;
