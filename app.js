@@ -168,6 +168,10 @@ function addItems(items, start, end) {
         $('#items').append(rendered);
     });
 
+    // Bind button events.
+    $('.button-done').click(markDone);
+    $('.button-delete').click(deleteItem);
+
     // If necessary, add the "Show more items" item.
     if (items.length > maxItems) {
         rendered = $(moreItemsTemplate({
