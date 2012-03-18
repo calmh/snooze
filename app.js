@@ -62,6 +62,22 @@ function due(item) {
     }
 }
 
+// Check if a given item is due to be done sometime today.
+function due_today(item) {
+    var today = new Date();
+    today.setHours(23);
+    today.setMinutes(59);
+    today.setSeconds(59);
+    var compare = Math.floor(today.getTime() / 1000);
+    return due(item) < compare;
+}
+
+// Check if a given item is due to be done.
+function due_now(item) {
+    var compare = Math.round(Date.now() / 1000);
+    return due(item) < compare;
+}
+
 function expand() {
     var par, el;
     par = $(this);
@@ -131,13 +147,12 @@ function addItems(items, start, end) {
 
         el = $('<div>' + index + '</div>');
         el.addClass('index');
-        //el.css('color', color(start, end, index / ns));
         d1.append(el);
 
-        if (due(item) > now) {
-            check = '&#x2611;';
+        if (due_today(item)) {
+            check = '&#x2610;'; // ☐
         } else {
-            check = '&#x2610;';
+            check = '&#x2611;'; // ☑
         }
         el = $('<span>' + check + ' ' + item.description + '</span>');
         el.addClass('description');
@@ -148,11 +163,11 @@ function addItems(items, start, end) {
         d1.append(el2);
 
         extra = 'Due ' + moment(due(item) * 1000).fromNow() + '.';
-        if (item.done.length > 0) {
+        if (item.done && item.done.length > 0) {
             tmp = item.done.slice(0).reverse().slice(0, 3);
-            extra += ' Done ' + _.map(tmp, function (x) { return moment(1000*x).fromNow(); }).join(', ');
+            extra += ' Done ' + _.map(tmp, function (x) { return moment(1000 * x).fromNow(); }).join(', ');
             if (item.done.length > 3) {
-                extra += ', &#x2026;';
+                extra += ', &#x2026;'; // …
             } else {
                 extra += '.';
             }
@@ -161,13 +176,13 @@ function addItems(items, start, end) {
         el.addClass('when');
         el2.append(el);
 
-        el = $('<button>&#x2713; Done</button>');
+        el = $('<button>&#x2713; Done</button>'); // ✓ Done
         el.attr('data-id', item.id);
         el.addClass('button-done');
         el.click(markDone);
         el2.append(el);
 
-        el = $('<button>&#x2717; Delete</button>');
+        el = $('<button>&#x2717; Delete</button>'); // ✗ Delete
         el.attr('data-id', item.id);
         el.addClass('button-delete');
         el.click(deleteItem);
@@ -176,12 +191,12 @@ function addItems(items, start, end) {
         d1.addClass('item');
         d1.click(expand);
 
-        if (due(item) > now) {
-            $('#items-future').append(d1);
-            nfuture++;
-        } else {
+        if (due_now(item)) {
             $('#items-due').append(d1);
             ndue++;
+        } else {
+            $('#items-future').append(d1);
+            nfuture++;
         }
     });
 
