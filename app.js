@@ -218,6 +218,17 @@ $(document).ready(function () {
     itemTemplate = _.template(document.getElementById('item-template').innerHTML);
     moreItemsTemplate = _.template(document.getElementById('moreItems-template').innerHTML);
 
+    // Display all items.
     _.defer(displayItems);
+
+    if (navigator.userAgent.match(/mobile/i)) {
+        // Hide the address bar, if we have enough content to fill the screen
+        // and it's currently visible.
+        _.defer(function () {
+            window.scrollTo(0,1);
+        });
+    }
+
+    // Set the next item id.
     _.defer(calculateNextId);
 });
