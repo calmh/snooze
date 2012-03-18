@@ -145,7 +145,7 @@ function addItems(items, start, end) {
         var check, extra, params = {};
 
         params.background = color(start, end, ci++ / ns);
-        params.check = due_today(item) ? '&#x2610;' : '&#x2611;';
+        params.check = due_today(item) ? 'icon-asterisk' : 'icon-ok';
         params.description = item.description;
         params.id = item.id;
         params.index = index;
