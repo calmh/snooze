@@ -115,9 +115,7 @@
         </style>
     </head>
     <body>
-        <div id='items-due'>
-        </div>
-        <div id='items-future'>
+        <div id='items'>
         </div>
         <div id='new'>
             <div id='form'>
@@ -137,4 +135,20 @@
         <div id='footer'>
         </div>
     </body>
+    <script type='text/html' id='item-template'>
+        <div class='item' style='background-color: <%= background %>'>
+            <div class='index'><%= index %></div>
+            <span class='description'><%= check %> <%- description %></span>
+            <div class='extra'>
+                <div class='when'><%= extra %></div>
+                <button data-id='<%= id %>' class='button-done'>&#x2713 Done</button>
+                <button data-id='<%= id %>' class='button-delete'>&#x2717 Delete</button>
+            </div>
+        </div>
+    </script>
+    <script type='text/html' id='moreItems-template'>
+        <div class='item' style='background-color: <%= background %>'>
+            <span class='description'>&#x21bb; Show <%= items %> more items</span>
+        </div>
+    </script>
 </html>

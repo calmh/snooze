@@ -6,6 +6,8 @@ var nextId = 0;
 var maxItems = 8;
 var startColor = [255, 0, 0];
 var endColor = [230, 230, 0];
+var itemTemplate;
+var moreItemsTemplate;
 
 // Create a new item from information in the form section.
 function newItem() {
@@ -125,7 +127,7 @@ function moreItems() {
 }
 
 function addItems(items, start, end) {
-    var now, el, el2, d1, ns, ndue = 0, nfuture = 0, ci = 0;
+    var now, rendered, ci = 0;
 
     if (maxItems === items.length - 1) {
         maxItems++;
@@ -136,31 +138,17 @@ function addItems(items, start, end) {
     // Never use less than four shades
     ns = (ns < 4) ? 4 : ns;
 
-    $('#items-due').empty();
-    $('#items-future').empty();
+    // Add each item to the list.
+    $('#items').empty();
     now = Math.round(Date.now() / 1000);
     _.each(items.slice(0, maxItems), function (item, index) {
-        var check, extra, tmp;
+        var check, extra, params = {};
 
-        d1 = $(document.createElement('div'));
-        d1.css('background-color', color(start, end, ci++ / ns));
-
-        el = $('<div>' + index + '</div>');
-        el.addClass('index');
-        d1.append(el);
-
-        if (due_today(item)) {
-            check = '&#x2610;'; // ☐
-        } else {
-            check = '&#x2611;'; // ☑
-        }
-        el = $('<span>' + check + ' ' + item.description + '</span>');
-        el.addClass('description');
-        d1.append(el);
-
-        el2 = $(document.createElement('div'));
-        el2.addClass('extra');
-        d1.append(el2);
+        params.background = color(start, end, ci++ / ns);
+        params.check = due_today(item) ? '&#x2610;' : '&#x2611;';
+        params.description = item.description;
+        params.id = item.id;
+        params.index = index;
 
         extra = 'Due ' + moment(due(item) * 1000).fromNow() + '.';
         if (item.done && item.done.length > 0) {
@@ -172,46 +160,25 @@ function addItems(items, start, end) {
                 extra += '.';
             }
         }
-        el = $('<div>' + extra + '</div>');
-        el.addClass('when');
-        el2.append(el);
+        params.extra = extra;
 
-        el = $('<button>&#x2713; Done</button>'); // ✓ Done
-        el.attr('data-id', item.id);
-        el.addClass('button-done');
-        el.click(markDone);
-        el2.append(el);
+        rendered = $(itemTemplate(params));
+        rendered.click(expand);
 
-        el = $('<button>&#x2717; Delete</button>'); // ✗ Delete
-        el.attr('data-id', item.id);
-        el.addClass('button-delete');
-        el.click(deleteItem);
-        el2.append(el);
-
-        d1.addClass('item');
-        d1.click(expand);
-
-        if (due_now(item)) {
-            $('#items-due').append(d1);
-            ndue++;
-        } else {
-            $('#items-future').append(d1);
-            nfuture++;
-        }
+        $('#items').append(rendered);
     });
 
+    // If necessary, add the "Show more items" item.
     if (items.length > maxItems) {
-        d1 = $(document.createElement('div'));
-        d1.css('background-color', color(start, end, ci++ / ns));
-        d1.addClass('item');
-        d1.click(moreItems);
-
-        el = $('<span>&#x21bb; Show ' + (items.length - maxItems) + ' more items</span>');
-        el.addClass('description');
-        d1.append(el);
-        $('#items-future').append(d1);
+        rendered = $(moreItemsTemplate({
+            background: color(start, end, ci++ / ns),
+            items: items.length - maxItems
+        }));
+        rendered.click(moreItems);
+        $('#items').append(rendered);
     }
 
+    // Set the background of the "Add new item" panel so it matches the list.
     $('#new').css('background-color', color(start, end, ci++ / ns));
 }
 
@@ -235,6 +202,9 @@ $(document).ready(function () {
     if (!items) {
         items = {};
     }
+
+    itemTemplate = _.template(document.getElementById('item-template').innerHTML);
+    moreItemsTemplate = _.template(document.getElementById('moreItems-template').innerHTML);
 
     _.defer(displayItems);
     _.defer(calculateNextId);
