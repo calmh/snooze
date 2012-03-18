@@ -42,7 +42,7 @@
             #items, #new {
                 width: 100%;
             }
-            #items {
+            .due {
                 font-weight: 600;
             }
             #new {
@@ -148,7 +148,7 @@
     <script type='text/html' id='item-template'>
         <div class='item' style='background-color: <%= background %>'>
             <div class='index'><%= index %></div>
-            <span class='description'><%= check %> <%- description %></span>
+            <span class='description <%= descr_class %>'><%= check %> <%- description %></span>
             <div class='extra'>
                 <div class='when'><%= extra %></div>
                 <button data-id='<%= id %>' class='button-done'>&#x2713 Done</button>

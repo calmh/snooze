@@ -150,6 +150,12 @@ function addItems(items, start, end) {
         params.id = item.id;
         params.index = index;
 
+        if (due_now(item)) {
+            params.descr_class = 'due';
+        } else {
+            params.descr_class = 'not_due';
+        }
+
         extra = 'Due ' + moment(due(item) * 1000).fromNow() + '.';
         if (item.done && item.done.length > 0) {
             tmp = item.done.slice(0).reverse().slice(0, 3);
