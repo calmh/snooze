@@ -149,47 +149,46 @@ function showMoreItems() {
     displayItems();
 }
 
-function addItems(items, start, end) {
-    var now, rendered, ci = 0;
+// Display the list of items.
+function displayItems() {
+    var now, rendered, colorIndex, itemlist;
 
-    if (maxItems === items.length - 1) {
+    colorIndex = 0;
+    itemlist = _.sortBy(_.values(items), due);
+
+    if (maxItems === itemlist.length - 1) {
         maxItems++;
     }
 
     // Calculate the number of shades to use
-    ns = (items.length <= maxItems) ? items.length : maxItems + 1;
+    ns = (itemlist.length <= maxItems) ? itemlist.length : maxItems + 1;
     // Never use less than four shades
     ns = (ns < 4) ? 4 : ns;
 
-    // Add each item to the list.
     $('#items').empty();
     now = Math.round(Date.now() / 1000);
-    _.each(items.slice(0, maxItems), function (item, index) {
-        var check, extra, params = {};
 
-        params.background = color(start, end, ci++ / ns);
+    // Add each item to the list.
+    _.each(itemlist.slice(0, maxItems), function (item, index) {
+        var params = {};
+
+        params.background = color(startColor, endColor, colorIndex++ / ns);
         params.check = due_today(item) ? 'icon-cog' : 'icon-ok';
+        params.descr_class = due_now(item) ? 'due' : 'not_due';
         params.description = item.description;
         params.id = item.id;
         params.index = index;
 
-        if (due_now(item)) {
-            params.descr_class = 'due';
-        } else {
-            params.descr_class = 'not_due';
-        }
-
-        extra = 'Due ' + moment(due(item) * 1000).fromNow() + '.';
+        params.extra = 'Due ' + moment(due(item) * 1000).fromNow() + '.';
         if (item.done && item.done.length > 0) {
             tmp = item.done.slice(0).reverse().slice(0, 3);
-            extra += ' Done ' + _.map(tmp, function (x) { return moment(1000 * x).fromNow(); }).join(', ');
+            params.extra += ' Done ' + _.map(tmp, function (x) { return moment(1000 * x).fromNow(); }).join(', ');
             if (item.done.length > 3) {
-                extra += ', &#x2026;'; // …
+                params.extra += ', &#x2026;'; // …
             } else {
-                extra += '.';
+                params.extra += '.';
             }
         }
-        params.extra = extra;
 
         rendered = $(itemTemplate(params));
         rendered.click(expandItemView);
@@ -201,26 +200,20 @@ function addItems(items, start, end) {
     $('.button-done').click(markDone);
     $('.button-delete').click(deleteItem);
 
-    // If necessary, add the "Show more items" item.
-    if (items.length > maxItems) {
+    if (itemlist.length > maxItems) {
+        // Add the "Show more items" item.
         rendered = $(moreItemsTemplate({
-            background: color(start, end, ci++ / ns),
-            items: Math.min(items.length, maxItems * 2) - maxItems
+            background: color(startColor, endColor, colorIndex++ / ns),
+            items: Math.min(itemlist.length, maxItems * 2) - maxItems
         }));
         rendered.click(showMoreItems);
         $('#items').append(rendered);
     }
 
-    if (ci > 0) {
+    if (colorIndex > 0) {
         // Set the background of the "Add new item" panel so it matches the list.
-        $('#new').css('background-color', color(start, end, ci++ / ns));
+        $('#new').css('background-color', color(startColor, endColor, colorIndex++ / ns));
     }
-}
-
-// Display the list of items.
-function displayItems() {
-    var itemlist = _.sortBy(_.values(items), due);
-    addItems(itemlist, startColor, endColor);
 }
 
 function showDebugInformation() {
