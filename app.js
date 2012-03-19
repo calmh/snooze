@@ -29,6 +29,7 @@ function newItem() {
 
 // Save items to local storage.
 function save() {
+    items.lastSaveDate = Math.round(Date.now() / 1000);
     localStorage.setItem('items', JSON.stringify(items));
 }
 
@@ -212,6 +213,11 @@ function calculateNextId() {
 function showDebugInformation() {
     $('#debugVersion').text(SNOOZE_VERSION);
     $('#debugDate').text(SNOOZE_DATE);
+    $('#debugNumItems').text(_.size(items).toString());
+    $('#debugItemsSize').text(JSON.stringify(items).length.toString() + ' chars');
+    if (items.lastSaveDate) {
+        $('#debugLastSave').text(new Date(1000 * items.lastSaveDate).toString());
+    }
     $('#debugInformation').show();
 }
 
