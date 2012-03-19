@@ -120,3 +120,8 @@ select {
     padding: 2em;
     height: 100%;
 }
+#debugInformation {
+    padding: 1em;
+    font-size: 60%;
+    text-align: center;
+}

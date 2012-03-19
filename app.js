@@ -8,6 +8,8 @@ var startColor = [255, 0, 0];
 var endColor = [230, 230, 0];
 var itemTemplate;
 var moreItemsTemplate;
+var SNOOZE_VERSION = 'no_version'; // To be set by deploydata.js
+var SNOOZE_DATE = 'not_deployed'; // To be set by deploydata.js
 
 // Create a new item from information in the form section.
 function newItem() {
@@ -207,6 +209,12 @@ function calculateNextId() {
     });
 }
 
+function showDebugInformation() {
+    $('#debugVersion').text(SNOOZE_VERSION);
+    $('#debugDate').text(SNOOZE_DATE);
+    $('#debugInformation').toggle();
+}
+
 $(document).ready(function () {
     // Enforce home screen installation on iDevices.
     if (window.navigator.userAgent.match(/iPhone|iPad/) && !window.navigator.standalone == true) {
@@ -238,4 +246,6 @@ $(document).ready(function () {
 
     // Set the next item id.
     _.defer(calculateNextId);
+
+    $('#new').click(showDebugInformation);
 });
