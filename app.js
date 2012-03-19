@@ -78,11 +78,15 @@ function due(item) {
 
 // Check if a given item is due to be done sometime today.
 function due_today(item) {
-    var today = new Date();
+    var today, compare;
+
+    today = new Date();
     today.setHours(23);
     today.setMinutes(59);
     today.setSeconds(59);
-    var compare = Math.floor(today.getTime() / 1000);
+
+    compare = Math.floor(today.getTime() / 1000);
+
     return due(item) < compare;
 }
 
@@ -231,8 +235,9 @@ function showDebugInformation() {
 }
 
 function itemsFsck(oldItems) {
-    var newItems = {};
-    var values = _.values(oldItems);
+    var newItems = {}, values;
+
+    values = _.values(oldItems);
     _.each(values, function (val, idx) {
         if (val && val.description) {
             val.id = idx;
@@ -241,12 +246,13 @@ function itemsFsck(oldItems) {
             idx++;
         }
     });
+
     return newItems;
 }
 
 $(document).ready(function () {
     // Enforce home screen installation on iDevices.
-    if (window.navigator.userAgent.match(/iPhone|iPad/) && !window.navigator.standalone == true) {
+    if (window.navigator.userAgent.match(/iPhone|iPad/) && !window.navigator.standalone) {
         $('#addToHomeScreen').show();
         $('#app').hide();
         return;
@@ -267,7 +273,7 @@ $(document).ready(function () {
         // Hide the address bar, if we have enough content to fill the screen
         // and it's currently visible.
         _.defer(function () {
-            window.scrollTo(0,1);
+            window.scrollTo(0, 1);
         });
     }
 
@@ -276,6 +282,9 @@ $(document).ready(function () {
 
     // Show debug information when user shakes device.
     window.addEventListener('shake', showDebugInformation, false);
+
     // Hide it when clicked.
-    $('#debugInformation').click(function() { $('#debugInformation').hide(); });
+    $('#debugInformation').click(function () {
+        $('#debugInformation').hide();
+    });
 });
