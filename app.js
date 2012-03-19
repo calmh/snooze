@@ -2,6 +2,7 @@
   newcap: true, maxerr: 50, indent: 4, undef: true, nomen: true, sloppy: true */
 
 var items;
+var lastSaveDate;
 var nextId = 0;
 var maxItems = 8;
 var startColor = [255, 0, 0];
@@ -13,24 +14,32 @@ var SNOOZE_DATE = 'not_deployed'; // To be set by deploydata.js
 
 // Create a new item from information in the form section.
 function newItem() {
-    var item, id;
-    item = {};
-    id = nextId++;
-    item.id = id;
-    item.description = $('#newDescription').val();
-    item.interval = parseInt($('#newInterval option:selected').val(), 10) * 86400;
-    item.done = [];
-    items[id] = item;
-    $('#newDescription').val('');
+    var item, id, descr;
 
-    _.defer(displayItems);
-    _.defer(save);
+    descr = $('#newDescription').val();
+    descr = descr.replace(/^\s+/, '').replace(/\s+$/, '');
+    if (descr.length === 0) {
+        alert('Enter a description to add a new item.');
+    } else {
+        item = {};
+        id = nextId++;
+        item.id = id;
+        item.description = $('#newDescription').val();
+        item.interval = parseInt($('#newInterval option:selected').val(), 10) * 86400;
+        item.done = [];
+        items[id] = item;
+        $('#newDescription').val('');
+
+        _.defer(displayItems);
+        _.defer(save);
+    }
 }
 
 // Save items to local storage.
 function save() {
-    items.lastSaveDate = Math.round(Date.now() / 1000);
+    lastSaveDate = Math.round(Date.now() / 1000);
     localStorage.setItem('items', JSON.stringify(items));
+    localStorage.setItem('lastSaveDate', lastSaveDate);
 }
 
 // Mark an item as done.
@@ -215,10 +224,24 @@ function showDebugInformation() {
     $('#debugDate').text(SNOOZE_DATE);
     $('#debugNumItems').text(_.size(items).toString());
     $('#debugItemsSize').text(JSON.stringify(items).length.toString() + ' chars');
-    if (items.lastSaveDate) {
-        $('#debugLastSave').text(new Date(1000 * items.lastSaveDate).toString());
+    if (lastSaveDate) {
+        $('#debugLastSave').text(new Date(1000 * lastSaveDate).toString());
     }
     $('#debugInformation').show();
+}
+
+function itemsFsck(oldItems) {
+    var newItems = {};
+    var values = _.values(oldItems);
+    _.each(values, function (val, idx) {
+        if (val && val.description) {
+            val.id = idx;
+            val.description = val.description.replace(/^\s+/, '').replace(/\s+$/, '');
+            newItems[idx] = val;
+            idx++;
+        }
+    });
+    return newItems;
 }
 
 $(document).ready(function () {
@@ -231,10 +254,8 @@ $(document).ready(function () {
 
     $('#newAdd').click(newItem);
 
-    items = JSON.parse(localStorage.getItem('items'));
-    if (!items) {
-        items = {};
-    }
+    items = itemsFsck(JSON.parse(localStorage.getItem('items')));
+    lastSaveDate = JSON.parse(localStorage.getItem('lastSaveDate'));
 
     itemTemplate = _.template(document.getElementById('item-template').innerHTML);
     moreItemsTemplate = _.template(document.getElementById('moreItems-template').innerHTML);
