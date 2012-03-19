@@ -216,13 +216,6 @@ function displayItems() {
     addItems(itemlist, startColor, endColor);
 }
 
-function calculateNextId() {
-    var changed;
-    _.each(items, function (item, id) {
-        nextId = id >= nextId ? id + 1 : nextId;
-    });
-}
-
 function showDebugInformation() {
     $('#debugVersion').text(SNOOZE_VERSION);
     $('#debugDate').text(SNOOZE_DATE);
@@ -250,35 +243,40 @@ function itemsFsck(oldItems) {
     return newItems;
 }
 
-$(document).ready(function () {
+function loadItems() {
+    items = itemsFsck(JSON.parse(localStorage.getItem('items')));
+    lastSaveDate = JSON.parse(localStorage.getItem('lastSaveDate'));
+    nextId = 0;
+    _.each(items, function (item, id) {
+        nextId = id >= nextId ? id + 1 : nextId;
+    });
+}
+
+function enforceAppMode() {
     // Enforce home screen installation on iDevices.
     if (window.navigator.userAgent.match(/iPhone|iPad/) && !window.navigator.standalone) {
         $('#addToHomeScreen').show();
         $('#app').hide();
-        return;
+        // Throw to stop initialization;
+        throw new Error("Unsupported environment");
     }
+}
 
-    $('#newAdd').click(newItem);
-
-    items = itemsFsck(JSON.parse(localStorage.getItem('items')));
-    lastSaveDate = JSON.parse(localStorage.getItem('lastSaveDate'));
-
+function loadTemplates() {
     itemTemplate = _.template(document.getElementById('item-template').innerHTML);
     moreItemsTemplate = _.template(document.getElementById('moreItems-template').innerHTML);
+}
 
-    // Display all items.
-    _.defer(displayItems);
-
+// Hide the address bar, if we have enough content to fill the screen
+// and it's currently visible.
+function hideAddressBar() {
     if (navigator.userAgent.match(/mobile/i)) {
-        // Hide the address bar, if we have enough content to fill the screen
-        // and it's currently visible.
-        _.defer(function () {
-            window.scrollTo(0, 1);
-        });
+        window.scrollTo(0, 1);
     }
+}
 
-    // Set the next item id.
-    _.defer(calculateNextId);
+function setupEvents() {
+    $('#newAdd').click(newItem);
 
     // Show debug information when user shakes device.
     window.addEventListener('shake', showDebugInformation, false);
@@ -287,4 +285,14 @@ $(document).ready(function () {
     $('#debugInformation').click(function () {
         $('#debugInformation').hide();
     });
+}
+
+$(document).ready(function () {
+    enforceAppMode();
+    loadItems();
+    loadTemplates();
+    setupEvents();
+
+    _.defer(displayItems);
+    _.defer(hideAddressBar);
 });
