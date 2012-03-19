@@ -18,21 +18,23 @@ function newItem() {
 
     descr = $('#newDescription').val();
     descr = descr.replace(/^\s+/, '').replace(/\s+$/, '');
+
     if (descr.length === 0) {
         alert('Enter a description to add a new item.');
-    } else {
-        item = {};
-        id = nextId++;
-        item.id = id;
-        item.description = $('#newDescription').val();
-        item.interval = parseInt($('#newInterval option:selected').val(), 10) * 86400;
-        item.done = [];
-        items[id] = item;
-        $('#newDescription').val('');
-
-        _.defer(displayItems);
-        _.defer(save);
+        throw('Adding item without description');
     }
+
+    item = {};
+    id = nextId++;
+    item.id = id;
+    item.description = $('#newDescription').val();
+    item.interval = parseInt($('#newInterval option:selected').val(), 10) * 86400;
+    item.done = [];
+    items[id] = item;
+    $('#newDescription').val('');
+
+    _.defer(displayItems);
+    _.defer(save);
 }
 
 // Save items to local storage.
@@ -44,22 +46,18 @@ function save() {
 
 // Mark an item as done.
 function markDone() {
-    var id, item;
-    id = $(this).attr('data-id');
-    item = items[id];
-    if (!item.done) {
-        item.done = [];
-    }
-    item.done.push(Math.round(Date.now() / 1000));
-    item.due = Math.round(Date.now() / 1000 + item.interval);
+    var id = $(this).attr('data-id');
+
+    items[id].done.push(Math.round(Date.now() / 1000));
+
     _.defer(displayItems);
     _.defer(save);
 }
 
 // Delete an item.
 function deleteItem() {
-    var id;
-    id = $(this).attr('data-id');
+    var id = $(this).attr('data-id');
+
     if (confirm('Delete "' + items[id].description + '"?')) {
         delete items[id];
         _.defer(displayItems);
@@ -96,29 +94,37 @@ function due_now(item) {
     return due(item) < compare;
 }
 
-function expand() {
-    var par, el;
-    par = $(this);
-    el = par.children('.extra');
-    if (!el.is(':visible')) {
+function expandItemView() {
+    var clickedItem, el;
+
+    clickedItem = $(this);
+    extraDiv = clickedItem.children('.extra');
+
+    if (!extraDiv.is(':visible')) {
+        // Hide all currently visible 'extra' divs.
         $('.extraVisible').hide()
             .removeClass('extraVisible');
 
+        // Remove the shadow and margin of all expanded items.
         $('.expanded').css('margin', '0px')
             .css('-webkit-box-shadow', 'none')
             .removeClass('.expanded');
 
-        el.show()
+        // Expand the 'extra' div of the clicked item.
+        extraDiv.show()
             .addClass('extraVisible');
 
-        par.css('margin', '10px 0px 10px 0px')
+        // SeclickedItemate and shadow the clicked item.
+        clickedItem.css('margin', '10px 0px 10px 0px')
             .css('-webkit-box-shadow', '0px 0px 5px #444')
             .addClass('expanded');
     } else {
-        el.hide()
+        // Hide the clicked items 'extra' div.
+        extraDiv.hide()
             .removeClass('extraVisible');
 
-        par.css('margin', '')
+        // Remove the shadow and margin of the clicked item.
+        clickedItem.css('margin', '')
             .css('-webkit-box-shadow', '')
             .removeClass('expanded');
     }
@@ -134,10 +140,11 @@ function color(start, end, pct) {
     for (i = 0; i < 3; i++) {
         res.push(Math.round(start[i] + (end[i] - start[i]) * pct));
     }
+
     return "rgb(" + res.join(',') + ")";
 }
 
-function moreItems() {
+function showMoreItems() {
     maxItems *= 2;
     displayItems();
 }
@@ -185,7 +192,7 @@ function addItems(items, start, end) {
         params.extra = extra;
 
         rendered = $(itemTemplate(params));
-        rendered.click(expand);
+        rendered.click(expandItemView);
 
         $('#items').append(rendered);
     });
@@ -200,7 +207,7 @@ function addItems(items, start, end) {
             background: color(start, end, ci++ / ns),
             items: Math.min(items.length, maxItems * 2) - maxItems
         }));
-        rendered.click(moreItems);
+        rendered.click(showMoreItems);
         $('#items').append(rendered);
     }
 
