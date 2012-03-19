@@ -4,10 +4,13 @@
     }
 }
 @media only screen and (min-device-width: 481px) {
-    body {
+    #app {
         max-width: 480px;
         margin: auto;
         margin-top: 20px;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
     }
 }
 .item {
@@ -23,17 +26,35 @@ body {
     font-family: Helvetica, Arial, sans-serif;
     font-weight: 300;
     line-height: 1.4;
-    background-color: #eee;
-    color: #fff;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: rgba(0,0,0,0); 
+    color: #fff;
+}
+#app {
+    background-color: #aaa;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bbb), color-stop(25%, #bbb), to(#777));
+    background-image: -webkit-linear-gradient(#bbb, #bbb 25%, #777);
+    background-image: -moz-linear-gradient(top, #bbb, #bbb 25%, #777);
+    background-image: -ms-linear-gradient(#bbb, #bbb 25%, #777);
+    background-image: -o-linear-gradient(#bbb, #bbb 25%, #777);
+    background-image: linear-gradient(#bbb, #bbb 25%, #777);
+    background-repeat: no-repeat;
+
     -webkit-box-shadow: 0px 0px 10px #000;
+}
+.expanded {
+    background-color: #ccc;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ccc), color-stop(25%, #ccc), to(#bbb));
+    background-image: -webkit-linear-gradient(#ccc, #ccc 25%, #bbb);
+    background-image: -moz-linear-gradient(top, #ccc, #ccc 25%, #bbb);
+    background-image: -ms-linear-gradient(#ccc, #ccc 25%, #bbb);
+    background-image: -o-linear-gradient(#ccc, #ccc 25%, #bbb);
+    background-image: linear-gradient(#ccc, #ccc 25%, #bbb);
+    background-repeat: no-repeat;
+    -webkit-box-shadow: 0px 0px 8px #000;
 }
 #items, #new {
     width: 100%;
-}
-#new {
-    background: #eee;
 }
 #new input {
     width: 90%;
@@ -48,10 +69,12 @@ body {
     padding: .5em .2em .5em .25em;
 }
 .item {
-    overflow: hidden;
     position: relative;
     color: #fff;
-    x-webkit-box-shadow: 0px 0px 5px #444;
+    overflow: hidden;
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
 }
 .item .index {
     position: absolute;
@@ -111,9 +134,12 @@ select {
 .button-delete {
     float: right;
 }
-.extra {
+.item .extra {
     display: none;
     overflow: hidden;
+}
+.expanded .extra {
+    display: block;
 }
 #addToHomeScreen {
     background: #666;

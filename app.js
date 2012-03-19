@@ -6,8 +6,6 @@ var items;
 var lastSaveDate;
 var nextId = 0;
 var maxItems = 8;
-var startColor = [255, 0, 0];
-var endColor = [230, 230, 0];
 var itemTemplate;
 var moreItemsTemplate;
 var SNOOZE_VERSION = 'no_version'; // To be set by deploydata.js
@@ -42,53 +40,13 @@ function due_now(item) {
     return due(item) < compare;
 }
 
-function color(start, end, pct) {
-    var res, i;
-    res = [];
-
-    pct = (pct < 0.0) ? 0.0 : pct;
-    pct = (pct > 1.0) ? 1.0 : pct;
-
-    for (i = 0; i < 3; i++) {
-        res.push(Math.round(start[i] + (end[i] - start[i]) * pct));
-    }
-
-    return "rgb(" + res.join(',') + ")";
-}
-
 function expandItemView() {
-    var clickedItem, extraDiv;
-
-    clickedItem = $(this);
-    extraDiv = clickedItem.children('.extra');
-
-    if (!extraDiv.is(':visible')) {
-        // Hide all currently visible 'extra' divs.
-        $('.extraVisible').hide()
-            .removeClass('extraVisible');
-
-        // Remove the shadow and margin of all expanded items.
-        $('.expanded').css('margin', '0px')
-            .css('-webkit-box-shadow', 'none')
-            .removeClass('.expanded');
-
-        // Expand the 'extra' div of the clicked item.
-        extraDiv.show()
-            .addClass('extraVisible');
-
-        // SeclickedItemate and shadow the clicked item.
-        clickedItem.css('margin', '10px 0px 10px 0px')
-            .css('-webkit-box-shadow', '0px 0px 5px #444')
-            .addClass('expanded');
+    var clicked = $(this);
+    if (clicked.children('.extra').is(':visible')) {
+        clicked.removeClass('expanded');
     } else {
-        // Hide the clicked items 'extra' div.
-        extraDiv.hide()
-            .removeClass('extraVisible');
-
-        // Remove the shadow and margin of the clicked item.
-        clickedItem.css('margin', '')
-            .css('-webkit-box-shadow', '')
-            .removeClass('expanded');
+        $('.expanded').removeClass('expanded');
+        clicked.addClass('expanded');
     }
 }
 
@@ -99,19 +57,13 @@ function showMoreItems() {
 
 // Display the list of items.
 function displayItems() {
-    var now, rendered, colorIndex, itemlist, nColors;
+    var now, rendered, itemlist;
 
-    colorIndex = 0;
     itemlist = _.sortBy(_.values(items), due);
 
     if (maxItems === itemlist.length - 1) {
         maxItems++;
     }
-
-    // Calculate the number of shades to use
-    nColors = (itemlist.length <= maxItems) ? itemlist.length : maxItems + 1;
-    // Never use less than four shades
-    nColors = (nColors < 4) ? 4 : nColors;
 
     $('#items').empty();
     now = Math.round(Date.now() / 1000);
@@ -120,7 +72,6 @@ function displayItems() {
     _.each(itemlist.slice(0, maxItems), function (item, index) {
         var params = {}, tmp;
 
-        params.background = color(startColor, endColor, colorIndex++ / nColors);
         params.check = due_today(item) ? 'icon-cog' : 'icon-ok';
         params.descr_class = due_now(item) ? 'due' : 'not_due';
         params.description = item.description;
@@ -151,16 +102,10 @@ function displayItems() {
     if (itemlist.length > maxItems) {
         // Add the "Show more items" item.
         rendered = $(moreItemsTemplate({
-            background: color(startColor, endColor, colorIndex++ / nColors),
             items: Math.min(itemlist.length, maxItems * 2) - maxItems
         }));
         rendered.click(showMoreItems);
         $('#items').append(rendered);
-    }
-
-    if (colorIndex > 0) {
-        // Set the background of the "Add new item" panel so it matches the list.
-        $('#new').css('background-color', color(startColor, endColor, colorIndex++ / nColors));
     }
 }
 
@@ -262,7 +207,7 @@ function loadItems() {
 
 // Enforce home screen installation on iDevices.
 function enforceAppMode() {
-    if (window.navigator.userAgent.match(/iPhone|iPad/) && !window.navigator.standalone) {
+    if (window.navigator.userAgent.match(/iPhune|iPad/) && !window.navigator.standalone) {
         $('#addToHomeScreen').show();
         $('#app').hide();
         // Throw to stop initialization;
