@@ -1,5 +1,6 @@
-/*jslint continue: false, plusplus: false, bitwise: true, plusplus: true,
-  newcap: true, maxerr: 50, indent: 4, undef: true, nomen: true, sloppy: true */
+/*jslint continue: false, bitwise: true, plusplus: true, newcap: true, maxerr: 50, indent: 4,
+  nomen: true, sloppy: true, browser: true */
+/*global _: false, $: false, alert: false, moment: false, confirm: false */
 
 var items;
 var lastSaveDate;
@@ -11,59 +12,6 @@ var itemTemplate;
 var moreItemsTemplate;
 var SNOOZE_VERSION = 'no_version'; // To be set by deploydata.js
 var SNOOZE_DATE = 'not_deployed'; // To be set by deploydata.js
-
-// Create a new item from information in the form section.
-function newItem() {
-    var item, id, descr;
-
-    descr = $('#newDescription').val();
-    descr = descr.replace(/^\s+/, '').replace(/\s+$/, '');
-
-    if (descr.length === 0) {
-        alert('Enter a description to add a new item.');
-        throw('Adding item without description');
-    }
-
-    item = {};
-    id = nextId++;
-    item.id = id;
-    item.description = $('#newDescription').val();
-    item.interval = parseInt($('#newInterval option:selected').val(), 10) * 86400;
-    item.done = [];
-    items[id] = item;
-    $('#newDescription').val('');
-
-    _.defer(displayItems);
-    _.defer(save);
-}
-
-// Save items to local storage.
-function save() {
-    lastSaveDate = Math.round(Date.now() / 1000);
-    localStorage.setItem('items', JSON.stringify(items));
-    localStorage.setItem('lastSaveDate', lastSaveDate);
-}
-
-// Mark an item as done.
-function markDone() {
-    var id = $(this).attr('data-id');
-
-    items[id].done.push(Math.round(Date.now() / 1000));
-
-    _.defer(displayItems);
-    _.defer(save);
-}
-
-// Delete an item.
-function deleteItem() {
-    var id = $(this).attr('data-id');
-
-    if (confirm('Delete "' + items[id].description + '"?')) {
-        delete items[id];
-        _.defer(displayItems);
-        _.defer(save);
-    }
-}
 
 // Calculate when a given item is due to be done.
 function due(item) {
@@ -94,8 +42,22 @@ function due_now(item) {
     return due(item) < compare;
 }
 
+function color(start, end, pct) {
+    var res, i;
+    res = [];
+
+    pct = (pct < 0.0) ? 0.0 : pct;
+    pct = (pct > 1.0) ? 1.0 : pct;
+
+    for (i = 0; i < 3; i++) {
+        res.push(Math.round(start[i] + (end[i] - start[i]) * pct));
+    }
+
+    return "rgb(" + res.join(',') + ")";
+}
+
 function expandItemView() {
-    var clickedItem, el;
+    var clickedItem, extraDiv;
 
     clickedItem = $(this);
     extraDiv = clickedItem.children('.extra');
@@ -130,20 +92,6 @@ function expandItemView() {
     }
 }
 
-function color(start, end, pct) {
-    var res, i;
-    res = [];
-
-    pct = (pct < 0.0) ? 0.0 : pct;
-    pct = (pct > 1.0) ? 1.0 : pct;
-
-    for (i = 0; i < 3; i++) {
-        res.push(Math.round(start[i] + (end[i] - start[i]) * pct));
-    }
-
-    return "rgb(" + res.join(',') + ")";
-}
-
 function showMoreItems() {
     maxItems *= 2;
     displayItems();
@@ -151,7 +99,7 @@ function showMoreItems() {
 
 // Display the list of items.
 function displayItems() {
-    var now, rendered, colorIndex, itemlist;
+    var now, rendered, colorIndex, itemlist, nColors;
 
     colorIndex = 0;
     itemlist = _.sortBy(_.values(items), due);
@@ -161,18 +109,18 @@ function displayItems() {
     }
 
     // Calculate the number of shades to use
-    ns = (itemlist.length <= maxItems) ? itemlist.length : maxItems + 1;
+    nColors = (itemlist.length <= maxItems) ? itemlist.length : maxItems + 1;
     // Never use less than four shades
-    ns = (ns < 4) ? 4 : ns;
+    nColors = (nColors < 4) ? 4 : nColors;
 
     $('#items').empty();
     now = Math.round(Date.now() / 1000);
 
     // Add each item to the list.
     _.each(itemlist.slice(0, maxItems), function (item, index) {
-        var params = {};
+        var params = {}, tmp;
 
-        params.background = color(startColor, endColor, colorIndex++ / ns);
+        params.background = color(startColor, endColor, colorIndex++ / nColors);
         params.check = due_today(item) ? 'icon-cog' : 'icon-ok';
         params.descr_class = due_now(item) ? 'due' : 'not_due';
         params.description = item.description;
@@ -203,7 +151,7 @@ function displayItems() {
     if (itemlist.length > maxItems) {
         // Add the "Show more items" item.
         rendered = $(moreItemsTemplate({
-            background: color(startColor, endColor, colorIndex++ / ns),
+            background: color(startColor, endColor, colorIndex++ / nColors),
             items: Math.min(itemlist.length, maxItems * 2) - maxItems
         }));
         rendered.click(showMoreItems);
@@ -212,8 +160,61 @@ function displayItems() {
 
     if (colorIndex > 0) {
         // Set the background of the "Add new item" panel so it matches the list.
-        $('#new').css('background-color', color(startColor, endColor, colorIndex++ / ns));
+        $('#new').css('background-color', color(startColor, endColor, colorIndex++ / nColors));
     }
+}
+
+// Save items to local storage.
+function save() {
+    lastSaveDate = Math.round(Date.now() / 1000);
+    localStorage.setItem('items', JSON.stringify(items));
+    localStorage.setItem('lastSaveDate', lastSaveDate);
+}
+
+// Delete an item.
+function deleteItem() {
+    var id = $(this).attr('data-id');
+
+    if (confirm('Delete "' + items[id].description + '"?')) {
+        delete items[id];
+        _.defer(displayItems);
+        _.defer(save);
+    }
+}
+
+// Create a new item from information in the form section.
+function newItem() {
+    var item, id, descr;
+
+    descr = $('#newDescription').val();
+    descr = descr.replace(/^\s+/, '').replace(/\s+$/, '');
+
+    if (descr.length === 0) {
+        alert('Enter a description to add a new item.');
+        throw new Error('Adding item without description');
+    }
+
+    item = {};
+    id = nextId++;
+    item.id = id;
+    item.description = $('#newDescription').val();
+    item.interval = parseInt($('#newInterval option:selected').val(), 10) * 86400;
+    item.done = [];
+    items[id] = item;
+    $('#newDescription').val('');
+
+    _.defer(displayItems);
+    _.defer(save);
+}
+
+// Mark an item as done.
+function markDone() {
+    var id = $(this).attr('data-id');
+
+    items[id].done.push(Math.round(Date.now() / 1000));
+
+    _.defer(displayItems);
+    _.defer(save);
 }
 
 function showDebugInformation() {
@@ -227,10 +228,13 @@ function showDebugInformation() {
     $('#debugInformation').show();
 }
 
+// Fix any known problems with items that might have been
+// cause by legacy versions and rewrite indexes.
 function itemsFsck(oldItems) {
     var newItems = {}, values;
 
     values = _.values(oldItems);
+    values = _.sortBy(values, due);
     _.each(values, function (val, idx) {
         if (val && val.description) {
             val.id = idx;
@@ -243,17 +247,21 @@ function itemsFsck(oldItems) {
     return newItems;
 }
 
+// Load items from localStorage and calculate the nextId counter.
 function loadItems() {
-    items = itemsFsck(JSON.parse(localStorage.getItem('items')));
+    items = JSON.parse(localStorage.getItem('items'));
     lastSaveDate = JSON.parse(localStorage.getItem('lastSaveDate'));
+
+    items = itemsFsck(items);
+
     nextId = 0;
     _.each(items, function (item, id) {
         nextId = id >= nextId ? id + 1 : nextId;
     });
 }
 
+// Enforce home screen installation on iDevices.
 function enforceAppMode() {
-    // Enforce home screen installation on iDevices.
     if (window.navigator.userAgent.match(/iPhone|iPad/) && !window.navigator.standalone) {
         $('#addToHomeScreen').show();
         $('#app').hide();
@@ -262,6 +270,8 @@ function enforceAppMode() {
     }
 }
 
+// Create template functions for the fragments defined
+// in the HTML file.
 function loadTemplates() {
     itemTemplate = _.template(document.getElementById('item-template').innerHTML);
     moreItemsTemplate = _.template(document.getElementById('moreItems-template').innerHTML);
