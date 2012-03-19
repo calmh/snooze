@@ -212,7 +212,7 @@ function calculateNextId() {
 function showDebugInformation() {
     $('#debugVersion').text(SNOOZE_VERSION);
     $('#debugDate').text(SNOOZE_DATE);
-    $('#debugInformation').toggle();
+    $('#debugInformation').show();
 }
 
 $(document).ready(function () {
@@ -247,5 +247,8 @@ $(document).ready(function () {
     // Set the next item id.
     _.defer(calculateNextId);
 
-    $('#new').click(showDebugInformation);
+    // Show debug information when user shakes device.
+    window.addEventListener('shake', showDebugInformation, false);
+    // Hide it when clicked.
+    $('#debugInformation').click(function() { $('#debugInformation').hide(); });
 });
