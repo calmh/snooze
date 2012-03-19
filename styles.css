@@ -7,10 +7,14 @@
     body {
         max-width: 480px;
         margin: auto;
+        margin-top: 20px;
     }
 }
 .item {
     font-size: 18pt;
+}
+html {
+    background: #444;
 }
 body, button, input, select {
     font-size: 12pt;
@@ -23,7 +27,7 @@ body {
     color: #fff;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: rgba(0,0,0,0); 
-    -webkit-box-shadow: 0px 0px 10px #444;
+    -webkit-box-shadow: 0px 0px 10px #000;
 }
 #items, #new {
     width: 100%;
