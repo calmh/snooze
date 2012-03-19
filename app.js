@@ -182,7 +182,7 @@ function addItems(items, start, end) {
     if (items.length > maxItems) {
         rendered = $(moreItemsTemplate({
             background: color(start, end, ci++ / ns),
-            items: items.length - maxItems
+            items: Math.min(items.length, maxItems * 2) - maxItems
         }));
         rendered.click(moreItems);
         $('#items').append(rendered);
