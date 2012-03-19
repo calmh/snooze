@@ -1,0 +1,149 @@
+@grad-start: #abc;
+@grad-end: #567;
+@grad2-start: #ccc;
+@grad2-end: #aaa;
+
+.border-radius (@radius) {
+    border-radius: @radius;
+    -moz-border-radius: @radius;
+    -webkit-border-radius: @radius;
+}
+
+.box-shadow (@x: 0, @y: 0, @blur: 1px, @color: #000) {
+    box-shadow: @arguments;
+    -moz-box-shadow: @arguments;
+    -webkit-box-shadow: @arguments;
+}
+
+.linear-gradient (@c1, @c2, @p, @c3) {
+    background-color: @c2;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@c1), color-stop(@p, @c2), to(@c3));
+    background-image: -webkit-linear-gradient(@c1, @c2 @p, @c3);
+    background-image: -moz-linear-gradient(top, @c1, @c2 @p, @c3);
+    background-image: -ms-linear-gradient(@c1, @c2 @p, @c3);
+    background-image: -o-linear-gradient(@c1, @c2 @p, @c3);
+    background-image: linear-gradient(@c1, @c2 @p, @c3);
+    background-repeat: no-repeat;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    body {
+        margin: 0;
+    }
+}
+@media only screen and (min-device-width: 481px) {
+    #app {
+        max-width: 480px;
+        margin: auto;
+        margin-top: 20px;
+        .border-radius(5px);
+    }
+}
+.item {
+    font-size: 18pt;
+}
+html {
+    background: #444;
+}
+body, button, input, select {
+    font-size: 12pt;
+}
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    line-height: 1.4;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0); 
+    color: #fff;
+}
+#app {
+    .linear-gradient(@grad-start, @grad-start, 25%, @grad-end);
+    .box-shadow(0px, 0px, 10px);
+}
+.expanded {
+    .linear-gradient(@grad2-start, @grad2-start, 25%, @grad2-end);
+    .box-shadow(0px, 0px, 8px);
+}
+#items, #new {
+    width: 100%;
+}
+#new input {
+    width: 90%;
+}
+#new button, #new select {
+    margin-left: 10px;
+}
+#form {
+    text-align: center;
+}
+.item, #form {
+    padding: .5em .2em .5em .25em;
+}
+.item {
+    position: relative;
+    color: #fff;
+    overflow: hidden;
+    .border-radius(5px);
+}
+.item .index {
+    position: absolute;
+    z-index: 0;
+    font-size: 100px;
+    right: -12px;
+    top: -42px;
+    font-weight: bold;
+    opacity: 0.3;
+}
+.item .description {
+    padding-left: 2em;
+    position: relative;
+    z-index: 10;
+}
+.item .when {
+    padding-left: 12px;
+    position: relative;
+    z-index: 10;
+    font-size: 80%;
+    opacity: 0.8;
+}
+button {
+    font-weight: bold;
+    margin: 10px;
+    min-width: 100px;
+    min-height: 30px;
+
+    display: inline-block;
+    padding: 4px 10px 4px;
+    color: #222222;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+
+    border: 1px solid #666;
+    border-bottom-color: #333;
+
+    .linear-gradient(#eeeeee, #eeeeee, 25%, #cccccc);
+    .border-radius(5px);
+    .box-shadow(0, 1px, 0, rgba(255, 255, 255, 0.4));
+}
+select {
+    background-color: #eeeeee;
+}
+.button-delete {
+    float: right;
+}
+.item .extra {
+    display: none;
+    overflow: hidden;
+}
+.expanded .extra {
+    display: block;
+}
+#addToHomeScreen {
+    background: #666;
+    padding: 2em;
+    height: 100%;
+}
+#debugInformation {
+    padding: 1em;
+    font-size: 70%;
+}
