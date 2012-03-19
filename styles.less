@@ -26,6 +26,18 @@
     background-repeat: no-repeat;
 }
 
+.button (@light, @dark) {
+    color: darken(@dark, 65%);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+
+    border: 1px solid darken(@dark, 40%);
+    border-bottom-color: darken(@dark, 55%);
+
+    .linear-gradient(@light, @light, 25%, @dark);
+    .border-radius(5px);
+    .box-shadow(0, 1px, 0, rgba(255, 255, 255, 0.4));
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     body {
         margin: 0;
@@ -84,27 +96,38 @@ body {
     color: #fff;
     overflow: hidden;
     .border-radius(5px);
+
+    .index {
+        position: absolute;
+        z-index: 0;
+        font-size: 100px;
+        right: -12px;
+        top: -42px;
+        font-weight: bold;
+        opacity: 0.3;
+    }
+
+    .description {
+        padding-left: 2em;
+        position: relative;
+        z-index: 10;
+    }
+
+    .when {
+        padding-left: 12px;
+        position: relative;
+        z-index: 10;
+        font-size: 80%;
+        opacity: 0.8;
+    }
+
+    .extra {
+        display: none;
+        overflow: hidden;
+    }
 }
-.item .index {
-    position: absolute;
-    z-index: 0;
-    font-size: 100px;
-    right: -12px;
-    top: -42px;
-    font-weight: bold;
-    opacity: 0.3;
-}
-.item .description {
-    padding-left: 2em;
-    position: relative;
-    z-index: 10;
-}
-.item .when {
-    padding-left: 12px;
-    position: relative;
-    z-index: 10;
-    font-size: 80%;
-    opacity: 0.8;
+.expanded .extra {
+    display: block;
 }
 button {
     font-weight: bold;
@@ -114,29 +137,18 @@ button {
 
     display: inline-block;
     padding: 4px 10px 4px;
-    color: #222222;
     text-align: center;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
 
-    border: 1px solid #666;
-    border-bottom-color: #333;
-
-    .linear-gradient(#eeeeee, #eeeeee, 25%, #cccccc);
-    .border-radius(5px);
-    .box-shadow(0, 1px, 0, rgba(255, 255, 255, 0.4));
+    .button(#eee, #ccc);
+}
+#new button {
+    .button(#bcd, #789);
 }
 select {
-    background-color: #eeeeee;
+    background-color: @grad-end;
 }
 .button-delete {
     float: right;
-}
-.item .extra {
-    display: none;
-    overflow: hidden;
-}
-.expanded .extra {
-    display: block;
 }
 #addToHomeScreen {
     background: #666;

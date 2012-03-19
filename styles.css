@@ -106,6 +106,13 @@ body {
   font-size: 80%;
   opacity: 0.8;
 }
+.item .extra {
+  display: none;
+  overflow: hidden;
+}
+.expanded .extra {
+  display: block;
+}
 button {
   font-weight: bold;
   margin: 10px;
@@ -113,11 +120,11 @@ button {
   min-height: 30px;
   display: inline-block;
   padding: 4px 10px 4px;
-  color: #222222;
   text-align: center;
+  color: #262626;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
-  border: 1px solid #666;
-  border-bottom-color: #333;
+  border: 1px solid #666666;
+  border-bottom-color: #404040;
   background-color: #eeeeee;
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eeeeee), color-stop(25%, #eeeeee), to(#cccccc));
   background-image: -webkit-linear-gradient(#eeeeee, #eeeeee 25%, #cccccc);
@@ -133,18 +140,31 @@ button {
   -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
   -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
+#new button {
+  color: #000000;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+  border: 1px solid #1d2227;
+  border-bottom-color: #000000;
+  background-color: #bbccdd;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bbccdd), color-stop(25%, #bbccdd), to(#778899));
+  background-image: -webkit-linear-gradient(#bbccdd, #bbccdd 25%, #778899);
+  background-image: -moz-linear-gradient(top, #bbccdd, #bbccdd 25%, #778899);
+  background-image: -ms-linear-gradient(#bbccdd, #bbccdd 25%, #778899);
+  background-image: -o-linear-gradient(#bbccdd, #bbccdd 25%, #778899);
+  background-image: linear-gradient(#bbccdd, #bbccdd 25%, #778899);
+  background-repeat: no-repeat;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
 select {
-  background-color: #eeeeee;
+  background-color: #556677;
 }
 .button-delete {
   float: right;
-}
-.item .extra {
-  display: none;
-  overflow: hidden;
-}
-.expanded .extra {
-  display: block;
 }
 #addToHomeScreen {
   background: #666;
