@@ -49,14 +49,14 @@
 
 .button (@light, @dark) {
     color: darken(@dark, 65%);
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
 
     border: 1px solid darken(@dark, 40%);
     border-bottom-color: darken(@dark, 55%);
 
     .linear-gradient-with-stop(@light, @light, 25%, @dark);
     .border-radius(5px);
-    .box-shadow(0, 1px, 0, rgba(255, 255, 255, 0.4));
+    .box-shadow(0, 1px, 0, rgba(255, 255, 255, 0.2));
 }
 
 /*
