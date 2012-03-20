@@ -1,0 +1,17 @@
+{
+    "author": "Jakob Borg <jakob@nym.se>",
+    "name": "Snooze",
+    "version": "1.0.0",
+    "engine": "node >= 0.6",
+    "scripts": {
+        "install": "./node_modules/.bin/lessc -x styles.less > styles.css"
+    },
+    "devDependencies": {
+        "less": "1.3.x"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://calmh@github.com/calmh/snooze.git"
+    }
+}
+
