@@ -74,6 +74,7 @@
         max-width: 480px;
         margin: auto;
         margin-top: 20px;
+
         .border-radius(5px);
     }
 }
@@ -105,16 +106,15 @@ body {
     padding: .5em .2em .5em .25em;
     position: relative;
 
-    .border-radius(5px);
-
     .index {
         position: absolute;
         z-index: 0;
-        font-size: 100px;
-        right: -12px;
-        top: -42px;
+        font-size: 140px;
+        right: -18px;
+        top: -50px;
         font-weight: bold;
         opacity: 0.3;
+        display: none;
     }
 
     .description {
@@ -137,11 +137,19 @@ body {
     }
 }
 
+.odd {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
 .expanded {
     .box-shadow(0px, 0px, 8px);
     .linear-gradient(@grad2-start, @grad2-end);
 
     .extra {
+        display: block;
+    }
+
+    .index {
         display: block;
     }
 }

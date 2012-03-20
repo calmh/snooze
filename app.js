@@ -57,7 +57,7 @@ function showMoreItems() {
 
 // Display the list of items.
 function displayItems() {
-    var now, rendered, itemlist;
+    var now, rendered, itemlist, itemIndex = 0;
 
     itemlist = _.sortBy(_.values(items), due);
 
@@ -72,7 +72,8 @@ function displayItems() {
     _.each(itemlist.slice(0, maxItems), function (item, index) {
         var params = {}, tmp;
 
-        params.check = due_today(item) ? 'icon-cog' : 'icon-ok';
+        params.item_class = itemIndex++ % 2 ? 'odd' : 'even';
+        params.check_class = due_today(item) ? 'icon-cog' : 'icon-ok';
         params.descr_class = due_now(item) ? 'due' : 'not_due';
         params.description = item.description;
         params.id = item.id;
@@ -104,9 +105,13 @@ function displayItems() {
         rendered = $(moreItemsTemplate({
             items: Math.min(itemlist.length, maxItems * 2) - maxItems
         }));
+        rendered.addClass(itemIndex++ % 2 ? 'odd' : 'even');
         rendered.click(showMoreItems);
         $('#items').append(rendered);
     }
+
+    $('#new').removeClass('even').removeClass('odd');
+    $('#new').addClass(itemIndex++ % 2 ? 'odd' : 'even');
 }
 
 // Save items to local storage.
