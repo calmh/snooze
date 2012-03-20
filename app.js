@@ -207,7 +207,7 @@ function loadItems() {
 
 // Enforce home screen installation on iDevices.
 function enforceAppMode() {
-    if (window.navigator.userAgent.match(/iPhune|iPad/) && !window.navigator.standalone) {
+    if (window.navigator.userAgent.match(/iPhone|iPad/) && !window.navigator.standalone) {
         $('#addToHomeScreen').show();
         $('#app').hide();
         // Throw to stop initialization;

@@ -1,7 +1,17 @@
+/*
+ * Constants
+ */
+
 @grad-start: #abc;
 @grad-end: #567;
 @grad2-start: #ccc;
 @grad2-end: #aaa;
+@item-font-size: 17pt;
+@default-font-size: 12pt;
+
+/*
+ * General mixins
+ */
 
 .border-radius (@radius) {
     border-radius: @radius;
@@ -15,7 +25,18 @@
     -webkit-box-shadow: @arguments;
 }
 
-.linear-gradient (@c1, @c2, @p, @c3) {
+.linear-gradient (@c1, @c2) {
+    background-color: @c1;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@c1), to(@c2));
+    background-image: -webkit-linear-gradient(@c1, @c2);
+    background-image: -moz-linear-gradient(top, @c1, @c2);
+    background-image: -ms-linear-gradient(@c1, @c2);
+    background-image: -o-linear-gradient(@c1, @c2);
+    background-image: linear-gradient(@c1, @c2);
+    background-repeat: no-repeat;
+}
+
+.linear-gradient-with-stop (@c1, @c2, @p, @c3) {
     background-color: @c2;
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@c1), color-stop(@p, @c2), to(@c3));
     background-image: -webkit-linear-gradient(@c1, @c2 @p, @c3);
@@ -33,16 +54,21 @@
     border: 1px solid darken(@dark, 40%);
     border-bottom-color: darken(@dark, 55%);
 
-    .linear-gradient(@light, @light, 25%, @dark);
+    .linear-gradient-with-stop(@light, @light, 25%, @dark);
     .border-radius(5px);
     .box-shadow(0, 1px, 0, rgba(255, 255, 255, 0.4));
 }
+
+/*
+ * Setup for different screen sizes.
+ */
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     body {
         margin: 0;
     }
 }
+
 @media only screen and (min-device-width: 481px) {
     #app {
         max-width: 480px;
@@ -51,35 +77,33 @@
         .border-radius(5px);
     }
 }
-.item {
-    font-size: 18pt;
-}
+
+
 html {
     background: #444;
 }
-body, button, input, select {
-    font-size: 12pt;
-}
 body {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); 
+    -webkit-user-select: none;
+    color: #fff;
     font-family: Helvetica, Arial, sans-serif;
+    font-size: @default-font-size;
     font-weight: 300;
     line-height: 1.4;
-    -webkit-user-select: none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0); 
-    color: #fff;
 }
 #app {
-    .linear-gradient(@grad-start, @grad-start, 25%, @grad-end);
     .box-shadow(0px, 0px, 10px);
+    .linear-gradient(@grad-start, @grad-end);
 }
 .expanded {
-    .linear-gradient(@grad2-start, @grad2-start, 25%, @grad2-end);
     .box-shadow(0px, 0px, 8px);
+    .linear-gradient(@grad2-start, @grad2-end);
 }
 #items, #new {
     width: 100%;
 }
 #new input {
+    font-size: @default-font-size;
     width: 90%;
 }
 #new button, #new select {
@@ -87,14 +111,15 @@ body {
 }
 #form {
     text-align: center;
-}
-.item, #form {
     padding: .5em .2em .5em .25em;
 }
 .item {
-    position: relative;
     color: #fff;
+    font-size: @item-font-size;
     overflow: hidden;
+    padding: .5em .2em .5em .25em;
+    position: relative;
+
     .border-radius(5px);
 
     .index {
@@ -126,10 +151,14 @@ body {
         overflow: hidden;
     }
 }
+
+/* When an item is expanded, show it's "extra" div */
 .expanded .extra {
     display: block;
 }
+
 button {
+    font-size: @default-font-size;
     font-weight: bold;
     margin: 10px;
     min-width: 100px;
@@ -141,21 +170,30 @@ button {
 
     .button(#eee, #ccc);
 }
+
 #new button {
     .button(#bcd, #789);
 }
-select {
-    background-color: @grad-end;
-}
+
 .button-delete {
     float: right;
 }
+
+select {
+    font-size: @default-font-size;
+    background-color: @grad-end;
+}
+
 #addToHomeScreen {
     background: #666;
-    padding: 2em;
     height: 100%;
+    padding: 2em;
+
+    .linear-gradient(darken(@grad-start, 15%), darken(@grad-end, 15%));
 }
+
 #debugInformation {
     padding: 1em;
     font-size: 70%;
 }
+
