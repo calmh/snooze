@@ -95,23 +95,8 @@ body {
     .box-shadow(0px, 0px, 10px);
     .linear-gradient(@grad-start, @grad-end);
 }
-.expanded {
-    .box-shadow(0px, 0px, 8px);
-    .linear-gradient(@grad2-start, @grad2-end);
-}
-#items, #new {
+#items {
     width: 100%;
-}
-#new input {
-    font-size: @default-font-size;
-    width: 90%;
-}
-#new button, #new select {
-    margin-left: 10px;
-}
-#form {
-    text-align: center;
-    padding: .5em .2em .5em .25em;
 }
 .item {
     color: #fff;
@@ -152,9 +137,13 @@ body {
     }
 }
 
-/* When an item is expanded, show it's "extra" div */
-.expanded .extra {
-    display: block;
+.expanded {
+    .box-shadow(0px, 0px, 8px);
+    .linear-gradient(@grad2-start, @grad2-end);
+
+    .extra {
+        display: block;
+    }
 }
 
 button {
@@ -171,29 +160,44 @@ button {
     .button(#eee, #ccc);
 }
 
-#new button {
-    .button(#bcd, #789);
-}
+#new {
+    width: 100%;
 
-.button-delete {
-    float: right;
-}
+    input {
+        font-size: @default-font-size;
+        width: 90%;
+    }
 
-select {
-    font-size: @default-font-size;
-    background-color: @grad-end;
+    #form {
+        text-align: center;
+        padding: .5em .2em .5em .25em;
+    }
+
+    button {
+        margin-left: 10px;
+        .button(#bcd, #789);
+    }
+
+    .button-delete {
+        float: right;
+    }
+
+    select {
+        margin-left: 10px;
+        font-size: @default-font-size;
+        background-color: @grad-end;
+    }
+
+    #debugInformation {
+        padding: 1em;
+        font-size: 70%;
+    }
 }
 
 #addToHomeScreen {
-    background: #666;
     height: 100%;
     padding: 2em;
 
-    .linear-gradient(darken(@grad-start, 15%), darken(@grad-end, 15%));
-}
-
-#debugInformation {
-    padding: 1em;
-    font-size: 70%;
+    .linear-gradient(darken(@grad-start, 25%), darken(@grad-end, 15%));
 }
 
