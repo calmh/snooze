@@ -48,6 +48,16 @@
 }
 
 .button (@light, @dark) {
+    font-size: @default-font-size;
+    font-weight: bold;
+    margin: 10px;
+    min-width: 100px;
+    min-height: 30px;
+
+    display: inline-block;
+    padding: 4px 10px 4px;
+    text-align: center;
+
     color: darken(@dark, 65%);
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
 
@@ -120,13 +130,11 @@ body {
     .description {
         padding-left: 2em;
         position: relative;
-        xz-index: 10;
     }
 
     .when {
         padding-left: 12px;
         position: relative;
-        xz-index: 10;
         font-size: 80%;
         opacity: 0.8;
     }
@@ -143,6 +151,11 @@ body {
 
     .button-delete {
         float: right;
+        .button(#ecc, #c99);
+    }
+
+    .button-done {
+        .button(#cec, #9c9);
     }
 }
 
@@ -163,20 +176,6 @@ body {
     }
 }
 
-button {
-    font-size: @default-font-size;
-    font-weight: bold;
-    margin: 10px;
-    min-width: 100px;
-    min-height: 30px;
-
-    display: inline-block;
-    padding: 4px 10px 4px;
-    text-align: center;
-
-    .button(#eee, #ccc);
-}
-
 #new {
     width: 100%;
 
@@ -192,13 +191,13 @@ button {
 
     button {
         margin-left: 10px;
-        .button(#bcd, #789);
+        .button(#ddd, #aaa);
     }
 
     select {
         margin-left: 10px;
         font-size: @default-font-size;
-        background-color: @grad-end;
+        background-color: #ddd;
     }
 
     #debugInformation {
