@@ -8,6 +8,7 @@ lib/jquery-1.7.1.min.js
 lib/moment-1.4.0.min.js
 lib/shake.js
 lib/underscore-1.3.1.min.js
+lib/uuid.js
 img/logo.png
 icons/css/font-awesome.css
 icons/font/fontawesome-webfont.eot
