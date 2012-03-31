@@ -1,0 +1,14 @@
+{
+    "author": "Jakob Borg <jakob@nym.se>",
+    "name": "snooze-server",
+    "version": "1.0.0",
+    "engine": "node >= 0.6",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "express": "*",
+        "riak-js": "*"
+    }
+}
+

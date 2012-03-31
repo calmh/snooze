@@ -1,3 +1,4 @@
 .*.swp
 deploydata.js
 node_modules
+gmon.out
