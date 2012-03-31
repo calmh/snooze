@@ -8,6 +8,7 @@ var nextId = 0;
 var maxItems = 8;
 var itemTemplate;
 var moreItemsTemplate;
+var uid;
 var SNOOZE_VERSION = 'no_version'; // To be set by deploydata.js
 var SNOOZE_DATE = 'not_deployed'; // To be set by deploydata.js
 
@@ -175,6 +176,7 @@ function showDebugInformation() {
     if (lastSaveDate) {
         $('#debugLastSave').text(new Date(1000 * lastSaveDate).toString());
     }
+    $('#debugUid').text(uid);
     $('#debugInformation').show();
 }
 
@@ -207,6 +209,12 @@ function loadItems() {
     nextId = 0;
     _.each(items, function (item, id) {
         nextId = id >= nextId ? id + 1 : nextId;
+    });
+}
+
+function loadItemsFromCloud() {
+    $.get('/data/' + uid, function (data) {
+        alert(data);
     });
 }
 
@@ -247,11 +255,22 @@ function setupEvents() {
     });
 }
 
+function enforceUniqueId() {
+    if (!window.location.hash) {
+        window.location.hash = uuid.v4();
+    }
+
+    return window.location.hash.replace(/^#/, '');
+}
+
 $(document).ready(function () {
+    uid = enforceUniqueId();
     enforceAppMode();
     loadItems();
+    loadItemsFromCloud();
     loadTemplates();
     setupEvents();
+    showDebugInformation();
 
     _.defer(displayItems);
     _.defer(hideAddressBar);
