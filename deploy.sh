@@ -8,7 +8,7 @@ rm -rf $DIR.prev
 mv $DIR $DIR.prev
 
 mkdir -p $DIR
-git archive HEAD | ( cd $DIR && tar xf - )
+git archive HEAD:client | ( cd $DIR && tar xf - )
 
 # Create a deployment description file
 VERS=`git describe --always`
