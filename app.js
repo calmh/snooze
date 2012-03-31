@@ -4,6 +4,7 @@
 
 var items;
 var lastSaveDate;
+var lastCloudSave;
 var nextId = 0;
 var maxItems = 8;
 var itemTemplate;
@@ -120,6 +121,22 @@ function save() {
     lastSaveDate = Math.round(Date.now() / 1000);
     localStorage.setItem('items', JSON.stringify(items));
     localStorage.setItem('lastSaveDate', lastSaveDate);
+    saveToCloud();
+}
+
+function saveToCloud() {
+    function saveSuccess(data) {
+        lastCloudSave = Math.floor(Date.now() / 1000);
+    }
+
+    var data = { lastSaveDate: lastSaveDate, items: items };
+
+    $.ajax('http://' + window.location.host + ':3344/' + uid, {
+            type: 'PUT',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: saveSuccess,
+            });
 }
 
 // Delete an item.
@@ -176,6 +193,9 @@ function showDebugInformation() {
     if (lastSaveDate) {
         $('#debugLastSave').text(new Date(1000 * lastSaveDate).toString());
     }
+    if (lastSaveDate) {
+        $('#debugLastCloudSave').text(new Date(1000 * lastCloudSave).toString());
+    }
     $('#debugUid').text(uid);
     $('#debugInformation').show();
 }
@@ -213,9 +233,22 @@ function loadItems() {
 }
 
 function loadItemsFromCloud() {
-    $.get('/data/' + uid, function (data) {
-        alert(data);
-    });
+    function loadSuccess(data) {
+        var ls = data.lastSaveDate;
+        lastCloudSave = ls;
+        if (ls > lastSaveDate) {
+            alert('Restoring from cloud backup.');
+            items = itemsFsck(data.items);
+            nextId = 0;
+            _.each(items, function (item, id) {
+                nextId = id >= nextId ? id + 1 : nextId;
+            });
+            _.defer(displayItems);
+            _.defer(save);
+        }
+    }
+
+    $.ajax('http://' + window.location.host + ':3344/' + uid, { success: loadSuccess });
 }
 
 // Enforce home screen installation on iDevices.
@@ -270,7 +303,6 @@ $(document).ready(function () {
     loadItemsFromCloud();
     loadTemplates();
     setupEvents();
-    showDebugInformation();
 
     _.defer(displayItems);
     _.defer(hideAddressBar);
