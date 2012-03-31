@@ -16,3 +16,6 @@ icons/font/fontawesome-webfont.svg
 icons/font/fontawesome-webfont.svgz
 icons/font/fontawesome-webfont.ttf
 icons/font/fontawesome-webfont.woff
+
+NETWORK:
+http://nym.se:3344/*
